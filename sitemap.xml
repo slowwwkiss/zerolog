@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://slowwwkiss.github.io/zerolog/</loc></url>
+  <url><loc>https://slowwwkiss.github.io/zerolog/quickstart.html</loc></url>
+  <url><loc>https://slowwwkiss.github.io/zerolog/guides/levels-sampling.html</loc></url>
+  <url><loc>https://slowwwkiss.github.io/zerolog/guides/context-fields.html</loc></url>
+  <url><loc>https://slowwwkiss.github.io/zerolog/guides/writers-output.html</loc></url>
+  <url><loc>https://slowwwkiss.github.io/zerolog/guides/integrations.html</loc></url>
+  <url><loc>https://slowwwkiss.github.io/zerolog/guides/performance.html</loc></url>
+  <url><loc>https://slowwwkiss.github.io/zerolog/api/package-root.html</loc></url>
+  <url><loc>https://slowwwkiss.github.io/zerolog/api.html</loc></url>
+</urlset>

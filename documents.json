@@ -1,0 +1,1999 @@
+{
+  "version": 1,
+  "name": "zerolog",
+  "documents": [
+    {
+      "id": "index.md",
+      "kind": "page",
+      "title": "zerolog — Zero Allocation JSON Logger",
+      "description": "Fast, simple structured logging for Go, dedicated to JSON output. Leveled logging, sampling, hooks, contextual fields, and a chaining API that avoids allocations and reflection.",
+      "tab": "",
+      "url": "https://slowwwkiss.github.io/zerolog/",
+      "markdown": "https://slowwwkiss.github.io/zerolog/index.md",
+      "file": "index.md",
+      "searchText": "# zerolog {#zerolog} the package provides a fast and simple logger dedicated to json output. zerolog's api is designed provide both great developer experience stunning performance. its unique chaining allows write (or cbor) log events by avoiding allocations reflection. uber's [zap](https://godoc.org/go.uber.org/zap) library pioneered this approach. takes concept next level with simpler use even better keep code base simple, focuses on efficient structured logging only. pretty console made possible using provided (but inefficient) `zerolog.consolewriter`. ## what you get {#what-you-get} - **blazing fast, low zero allocation** — see [performance](/zerolog/guides/performance.html). **leveled logging** trace, debug, info, warn, error, fatal, panic, plus global switch. **log sampling** `basicsampler` `burstsampler` high-volume debug output under control. **hooks** run every event, for example attach severity or trace id. **contextual fields** strongly typed key/value pairs, sub-loggers, `context.context` integration. **integration `net/http`** `hlog` carries through request handlers. **json cbor encoding** binary logs via `binary_log` build tag. **pretty development** `consolewriter` turns into colorized lines. **error optional stacktrace** `github.com/pkg/errors` `pkgerrors.marshalstack`. **`log/slog` integration** `slog.handler` that routes standard-library records zerolog. where start {#where-to-start} new zerolog? read [quickstart](/zerolog/quickstart.html) install, your first line, leveled event. already logging? [levels sampling](/zerolog/guides/levels-sampling.html) [context fields](/zerolog/guides/context-fields.html) cover daily api. shipping production? [writers output](/zerolog/guides/writers-output.html) [performance](/zerolog/guides/performance.html) outputs, diode writer, caveats bite (field duplication, `event` pooling, `updatecontext` concurrency). reference {#api-reference} [go api](/zerolog/api.html) tab full `github.com/rs/zerolog` package, generated from source: 26 types, 20 package-level functions, 215 methods, 16 constants, 34 variables including `logger`, `event`, `context`, `consolewriter`, `multilevelwriter`, samplers. documented version {#documented-version} site documents **rs/zerolog @ 284f7c8** (commit `284f7c889533b78603191349f4a5c48628d7afd2`, 10 nov 2026), mit licensed. source links in point at exact commit github.",
+      "documentId": "index",
+      "locale": "en",
+      "contentLocale": "en",
+      "contentVersion": "current",
+      "versionScope": "site",
+      "alternates": [
+        {
+          "locale": "en",
+          "contentVersion": "current",
+          "url": "https://slowwwkiss.github.io/zerolog/",
+          "markdown": "https://slowwwkiss.github.io/zerolog/index.md"
+        }
+      ]
+    },
+    {
+      "id": "quickstart.md",
+      "kind": "page",
+      "title": "Quickstart",
+      "description": "Install zerolog, write your first log line, and log your first leveled event with contextual fields.",
+      "tab": "",
+      "url": "https://slowwwkiss.github.io/zerolog/quickstart.html",
+      "markdown": "https://slowwwkiss.github.io/zerolog/quickstart.md",
+      "file": "quickstart.md",
+      "searchText": "# quickstart {#quickstart} ## install {#install} ```bash go get -u github.com/rs/zerolog/log ``` your first log line {#your-first-log-line} for simple logging, import the global logger package `github.com/rs/zerolog/log`: ```go main ( \"github.com/rs/zerolog\" \"github.com/rs/zerolog/log\" ) func main() { // unix time is faster and smaller than most timestamps zerolog.timefieldformat = zerolog.timeformatunix log.print(\"hello world\") } output: {\"time\":1516134303,\"level\":\"debug\",\"message\":\"hello world\"} by default `log` writes to `os.stderr`. level `log.print` *trace*. leveled event {#your-first-leveled-event} log.info().msg(\"hello {\"time\":1516134303,\"level\":\"info\",\"message\":\"hello it very important note that when using chaining api, as shown above (`log.info().msg(\"hello world\")`), chain must have either `msg` or `msgf` method call. if you forget add of these, will not occur there no compile error alert this. contextual fields {#add-contextual-fields} zerolog allows data be added messages in form key:value pairs. message adds \"context\" about can critical debugging well myriad other purposes: log.debug(). str(\"scale\", \"833 cents\"). float64(\"interval\", 833.09). msg(\"fibonacci everywhere\") str(\"name\", \"tom\"). send() {\"level\":\"debug\",\"scale\":\"833 cents\",\"interval\":833.09,\"time\":1562212768,\"message\":\"fibonacci everywhere\"} {\"level\":\"debug\",\"name\":\"tom\",\"time\":1562212768} example adding fields, are strongly typed. full list supported field types [go api](/zerolog/api.html) reference under `event` — `str`, `bool`, `int`, `int64`, `float64`, `dur`, `dict`, `err`, `time`, more, them also slice (`strs`, `errs`, so on). create own {#create-your-own-logger} := zerolog.new(os.stderr).with().timestamp().logger() logger.info().str(\"foo\", \"bar\").msg(\"hello {\"level\":\"info\",\"time\":1494567715,\"message\":\"hello world\",\"foo\":\"bar\"} sub-loggers let loggers with additional context: sublogger log.with(). str(\"component\", \"foo\"). logger() sublogger.info().msg(\"hello world\",\"component\":\"foo\"} next steps {#next-steps} - [levels sampling](/zerolog/guides/levels-sampling.html) seven levels, switch, sampling. [context fields](/zerolog/guides/context-fields.html) sub-loggers, hooks, caller info, names. [writers output](/zerolog/guides/writers-output.html) console output, multiple outputs, non-blocking diode writer.",
+      "documentId": "quickstart",
+      "locale": "en",
+      "contentLocale": "en",
+      "contentVersion": "current",
+      "versionScope": "site",
+      "alternates": [
+        {
+          "locale": "en",
+          "contentVersion": "current",
+          "url": "https://slowwwkiss.github.io/zerolog/quickstart.html",
+          "markdown": "https://slowwwkiss.github.io/zerolog/quickstart.md"
+        }
+      ]
+    },
+    {
+      "id": "guides/levels-sampling.md",
+      "kind": "page",
+      "title": "Levels and sampling",
+      "description": "The seven log levels, the global level switch, logging without a level, and sampling with BasicSampler and BurstSampler.",
+      "tab": "",
+      "url": "https://slowwwkiss.github.io/zerolog/guides/levels-sampling.html",
+      "markdown": "https://slowwwkiss.github.io/zerolog/guides/levels-sampling.md",
+      "file": "guides/levels-sampling.md",
+      "searchText": "# levels and sampling {#levels-and-sampling} ## the {#the-levels} zerolog allows for logging at following (from highest to lowest): - panic (`zerolog.paniclevel`, 5) fatal (`zerolog.fatallevel`, 4) error (`zerolog.errorlevel`, 3) warn (`zerolog.warnlevel`, 2) info (`zerolog.infolevel`, 1) debug (`zerolog.debuglevel`, 0) trace (`zerolog.tracelevel`, -1) setting global level {#setting-the-global-level} you can set any of these options using `setgloballevel` function in package, passing one given constants above, e.g. `zerolog.infolevel` would be \"info\" level. whichever is chosen, all logs with a greater than or equal that will written. turn off entirely, pass `zerolog.disabled` constant. if never call `setgloballevel`, logger writes `os.stderr` `trace` (the lowest level), so **every** event — `trace`, `debug`, `info`, `warn`, `error`, `fatal`, `panic` written stderr by default. calling `zerolog.setgloballevel(zerolog.infolevel)` raises minimum `debug` messages are suppressed. this example uses command-line flags demonstrate various outputs depending on chosen log level: ```go package main import ( \"flag\" \"github.com/rs/zerolog\" \"github.com/rs/zerolog/log\" ) func main() { zerolog.timefieldformat = zerolog.timeformatunix := flag.bool(\"debug\", false, \"sets debug\") flag.parse() // default info, unless flag present zerolog.setgloballevel(zerolog.infolevel) *debug zerolog.setgloballevel(zerolog.debuglevel) } log.debug().msg(\"this message appears only when log.info().msg(\"this info\") e log.debug(); e.enabled() compute output enabled. value \"bar\" e.str(\"foo\", value).msg(\"some message\") ``` (no flag): ```bash $ ./loglevelexample {\"time\":1516387492,\"level\":\"info\",\"message\":\"this info\"} (debug set): -debug {\"time\":1516387573,\"level\":\"debug\",\"message\":\"this debug\"} {\"time\":1516387573,\"level\":\"info\",\"message\":\"this {\"time\":1516387573,\"level\":\"debug\",\"foo\":\"bar\",\"message\":\"some message\"} without {#logging-without-a-level-or-message} may choose specific `log` method. also write an empty string `msg string` parameter `msg` method: log.log(). str(\"foo\", \"bar\"). msg(\"\") output: {\"time\":1494567715,\"foo\":\"bar\"} {#error-and-fatal-logging} errors `err` \"errors\" err errors.new(\"seems we have here\") log.error().err(err).msg(\"\") {\"level\":\"error\",\"error\":\"seems here\",\"time\":1609085256} field name `error`; change `zerolog.errorfieldname` meet your needs. exits process status 1 after writing: errors.new(\"a repo man spends his life getting into tense situations\") service \"myservice\" log.fatal(). err(err). str(\"service\", service). msgf(\"cannot start %s\", service) {\"time\":1516133263,\"level\":\"fatal\",\"error\":\"a situations\",\"service\":\"myservice\",\"message\":\"cannot myservice\"} exit note: `msgf` generates allocation even disabled. ### stacktrace {#error-logging-with-a-stacktrace} `github.com/pkg/errors`, add formatted errors: \"github.com/pkg/errors\" \"github.com/rs/zerolog/pkgerrors\" zerolog.errorstackmarshaler pkgerrors.marshalstack outer() log.error().stack().err(err).msg(\"\") `zerolog.errorstackmarshaler` must order stack anything. see `pkgerrors.marshalstack` [go api](/zerolog/api.html) reference. {#log-sampling} sampled log.sample(&zerolog.basicsampler{n: 10}) sampled.info().msg(\"will logged every 10 messages\") {\"time\":1494567715,\"level\":\"info\",\"message\":\"will messages\"} more advanced sampling: let 5 per period second. over message, 100 logged. other not sampled. log.sample(zerolog.levelsampler{ debugsampler: &zerolog.burstsampler{ burst: 5, period: 1*time.second, nextsampler: &zerolog.basicsampler{n: 100}, }, }) sampled.debug().msg(\"hello world\") {\"time\":1494567715,\"level\":\"debug\",\"message\":\"hello world\"} controlled `logger.sample`, globally `zerolog.disablesampling` `true`, loggers stop issue 100% their events.",
+      "documentId": "guides/levels-sampling",
+      "locale": "en",
+      "contentLocale": "en",
+      "contentVersion": "current",
+      "versionScope": "site",
+      "alternates": [
+        {
+          "locale": "en",
+          "contentVersion": "current",
+          "url": "https://slowwwkiss.github.io/zerolog/guides/levels-sampling.html",
+          "markdown": "https://slowwwkiss.github.io/zerolog/guides/levels-sampling.md"
+        }
+      ]
+    },
+    {
+      "id": "guides/context-fields.md",
+      "kind": "page",
+      "title": "Context and fields",
+      "description": "Sub-loggers, contextual fields, sub-dictionaries, hooks, caller info, custom field names, and context.Context integration.",
+      "tab": "",
+      "url": "https://slowwwkiss.github.io/zerolog/guides/context-fields.html",
+      "markdown": "https://slowwwkiss.github.io/zerolog/guides/context-fields.md",
+      "file": "guides/context-fields.md",
+      "searchText": "# context and fields {#context-and-fields} ## field types {#field-types} ### standard {#standard-types} - `str` `bool` `int`, `int8`, `int16`, `int32`, `int64` `uint`, `uint8`, `uint16`, `uint32`, `uint64` `float32`, `float64` advanced {#advanced-fields} `err`: takes an `error` renders it as a string using the `zerolog.errorfieldname` name. `func`: run `func` only if level is enabled. `timestamp`: inserts timestamp with `zerolog.timestampfieldname` name, formatted `zerolog.timefieldformat`. `time`: adds time `dur`: `time.duration`. `dict`: sub-key/value of event. `rawjson`: already encoded json (`[]byte`). `hex`: value hexadecimal `interface`: uses reflection to marshal type. `ipaddr`: `net.ip`. `ipprefix`: `net.ipnet`. `macaddr`: `net.hardwareaddr`. most are also available in slice format (`strs` for `[]string`, `errs` `[]error`, etc.). full list on `event` [go api](/zerolog/api.html) reference. sub-dictionary {#sub-dictionary} ```go log.info(). str(\"foo\", \"bar\"). dict(\"dict\", zerolog.dict(). str(\"bar\", \"baz\"). int(\"n\", 1), ).msg(\"hello world\") // output: {\"level\":\"info\",\"time\":1494567715,\"foo\":\"bar\",\"dict\":{\"bar\":\"baz\",\"n\":1},\"message\":\"hello world\"} ``` customize automatic names {#customize-automatic-field-names} zerolog.timestampfieldname = \"t\" zerolog.levelfieldname \"l\" zerolog.messagefieldname \"m\" log.info().msg(\"hello {\"l\":\"info\",\"t\":1494567715,\"m\":\"hello add contextual global logger {#add-contextual-fields-to-the-global-logger} log.logger log.with().str(\"foo\", \"bar\").logger() file line number {#add-file-and-line-number} equivalent `llongfile`: log.with().caller().logger() {\"level\": \"info\", \"message\": \"hello world\", \"caller\": \"/go/src/your_project/some_file:21\"} `lshortfile`: zerolog.callermarshalfunc func(pc uintptr, string, int) { return filepath.base(file) + \":\" strconv.itoa(line) } \"some_file:21\"} hooks {#hooks} type severityhook struct{} func (h severityhook) run(e *zerolog.event, zerolog.level, msg string) != zerolog.nolevel e.str(\"severity\", level.string()) hooked := log.hook(severityhook{}) hooked.warn().msg(\"\") {\"level\":\"warn\",\"severity\":\"warn\"} hook runs every event its logger. `hookfunc` function form same interface; `logger.hook` attaches logger, can read event's `e.getctx()` — useful log trace span ids stored `context.context`. see [integrations](/zerolog/guides/integrations.html) tracing example. pass sub-logger by {#pass-a-sub-logger-by-context} ctx log.with().str(\"component\", \"module\").logger().withcontext(ctx) log.ctx(ctx).info().msg(\"hello {\"component\":\"module\",\"level\":\"info\",\"message\":\"hello context.context integration {#contextcontext-integration} go contexts commonly passed throughout code, this help you your into places might otherwise be hard inject. `logger` instance may attached (`context.context`) `logger.withcontext(ctx)` extracted from `zerolog.ctx(ctx)`: f() zerolog.new(os.stdout) context.background() attach logger.withcontext(ctx) somefunc(ctx) somefunc(ctx context.context) get context. it's nil, then `zerolog.defaultcontextlogger` returned, `defaultcontextlogger` disabled returned. zerolog.ctx(ctx) logger.info().msg(\"hello\") second `context.context` allows current logged event, retrieve hooks. or other information context, facilitates unification logging some systems: tracinghook tracinghook) e.getctx() spanid getspanidfromcontext(ctx) per framework e.str(\"span-id\", spanid) setup logger.hook(tracinghook{}) use make logger.info().ctx(ctx).msg(\"hello\") settings {#global-settings} changed will applied all loggers: `log.logger`: set (the one used package methods). `zerolog.setgloballevel`: raise minimum loggers. call `zerolog.disabled` disable altogether (quiet mode). `zerolog.disablesampling`: argument `true`, sampled loggers stop sampling issue 100% their events. `zerolog.timestampfieldname`: `timestamp` `zerolog.levelfieldname`: `zerolog.messagefieldname`: message `zerolog.errorfieldname`: `err` `zerolog.timefieldformat`: `time` formatting. `zerolog.timeformatunix`, `zerolog.timeformatunixms` `zerolog.timeformatunixmicro`, times unix timestamps. `zerolog.durationfieldunit`: unit `time.duration` added `dur` (default: `time.millisecond`). `zerolog.durationfieldformat`: `durationformatfloat`, `durationformatint`, `durationformatstring` `durationformatfloat`) append `duration` `float64`, `int64`, calling `string()` (respectively). `zerolog.errorhandler`: called whenever zerolog fails write output. not set, error printed stderr. handler must thread safe non-blocking. `zerolog.floatingpointprecision`: than -1, controls digits when formatting float numbers json. [strconv.formatfloat](https://pkg.go.dev/strconv#formatfloat) more details.",
+      "documentId": "guides/context-fields",
+      "locale": "en",
+      "contentLocale": "en",
+      "contentVersion": "current",
+      "versionScope": "site",
+      "alternates": [
+        {
+          "locale": "en",
+          "contentVersion": "current",
+          "url": "https://slowwwkiss.github.io/zerolog/guides/context-fields.html",
+          "markdown": "https://slowwwkiss.github.io/zerolog/guides/context-fields.md"
+        }
+      ]
+    },
+    {
+      "id": "guides/writers-output.md",
+      "kind": "page",
+      "title": "Writers and output",
+      "description": "ConsoleWriter pretty logging, multiple outputs with MultiLevelWriter, the lock-free diode writer, and syslog and journald writers.",
+      "tab": "",
+      "url": "https://slowwwkiss.github.io/zerolog/guides/writers-output.html",
+      "markdown": "https://slowwwkiss.github.io/zerolog/guides/writers-output.md",
+      "file": "guides/writers-output.md",
+      "searchText": "# writers and output {#writers-and-output} a zerolog `logger` writes to any `io.writer`. `zerolog.new` takes the writer; global logger `os.stderr` by default. ## pretty logging {#pretty-logging} log human-friendly, colorized output, use `zerolog.consolewriter`: ```go log.logger = log.output(zerolog.consolewriter{out: os.stderr}) log.info().str(\"foo\", \"bar\").msg(\"hello world\") // output: 3:04pm inf hello world foo=bar ``` customize configuration formatting: := zerolog.consolewriter{out: os.stdout, timeformat: time.rfc3339} output.formatlevel func(i interface{}) string { return strings.toupper(fmt.sprintf(\"| %-6s|\", i)) } output.formatmessage fmt.sprintf(\"***%s****\", i) output.formatfieldname fmt.sprintf(\"%s:\", output.formatfieldvalue strings.toupper(fmt.sprintf(\"%s\", zerolog.new(output).with().timestamp().logger() 2006-01-02t15:04:05z07:00 | info ***hello world**** foo:bar custom advanced nocolor: true, partsorder: []string{\"level\", \"one\", \"two\", \"three\", \"message\"}, fieldsexclude: []string{\"one\", \"three\"}} strings.toupper(fmt.sprintf(\"%-6s\", output.formatpartvaluebyname interface{}, s string) var ret switch case \"one\": \"two\": strings.tolower(fmt.sprintf(\"%s\", \"three\": strings.tolower(fmt.sprintf(\"(%s)\", zerolog.new(output) \"bar\"). str(\"two\", \"test_two\"). str(\"one\", \"test_one\"). str(\"three\", \"test_three\"). msg(\"hello test_one test_two (test_three) console is for humans, not machines: it provided but inefficient writer. keep json anything pipeline will read. multiple outputs {#multiple-log-outputs} `zerolog.multilevelwriter` may be used send message outputs. in this example, we both `os.stdout` in-built `consolewriter`: func main() consolewriter os.stdout} multi zerolog.multilevelwriter(consolewriter, os.stdout) zerolog.new(multi).with().timestamp().logger() logger.info().msg(\"hello world!\") (line 1: console; line 2: stdout) 12:36pm world! {\"level\":\"info\",\"time\":\"2019-11-07t12:36:38+03:00\",\"message\":\"hello world!\"} thread-safe, lock-free, non-blocking writer {#thread-safe-lock-free-non-blocking-writer} if your might slow or thread-safe you need producers never get slowed down writer, can `diode.writer` as follows: wr diode.newwriter(os.stdout, 1000, 10*time.millisecond, func(missed int) fmt.printf(\"logger dropped %d messages\", missed) }) zerolog.new(wr) log.print(\"test\") install `code.cloudfoundry.org/go-diodes` feature. diode drops messages when its buffer full reports count through callback — are blocked. syslog journald {#syslog-and-journald} package also ships system logging: `zerolog.sysloglevelwriter` syslog, `journald` subpackage systemd-journald. [go api](/zerolog/api.html) reference (`sysloglevelwriter`, separate module, covered site's root-package reference). binary encoding {#binary-encoding} addition default encoding, produce logs using [cbor](https://cbor.io) encoding. choice of decided at compile time build tag `binary_log` ```bash go -tags binary_log . decode encoded files cbor decoder. one that has been tested work with library [csd](https://github.com/toravir/csd/).",
+      "documentId": "guides/writers-output",
+      "locale": "en",
+      "contentLocale": "en",
+      "contentVersion": "current",
+      "versionScope": "site",
+      "alternates": [
+        {
+          "locale": "en",
+          "contentVersion": "current",
+          "url": "https://slowwwkiss.github.io/zerolog/guides/writers-output.html",
+          "markdown": "https://slowwwkiss.github.io/zerolog/guides/writers-output.md"
+        }
+      ]
+    },
+    {
+      "id": "guides/integrations.md",
+      "kind": "page",
+      "title": "Integrations",
+      "description": "Use zerolog with net/http via hlog, with the standard library log/slog, and as the standard logger's output.",
+      "tab": "",
+      "url": "https://slowwwkiss.github.io/zerolog/guides/integrations.html",
+      "markdown": "https://slowwwkiss.github.io/zerolog/guides/integrations.md",
+      "file": "guides/integrations.md",
+      "searchText": "# integrations {#integrations} ## integration with `net/http` {#integration-with-nethttp} the `github.com/rs/zerolog/hlog` package provides some helpers to integrate zerolog `http.handler`. in this example we use [alice](https://github.com/justinas/alice) install logger for better readability: ```go log := zerolog.new(os.stdout).with(). timestamp(). str(\"role\", \"my-service\"). str(\"host\", host). logger() c alice.new() // handler default output on console = c.append(hlog.newhandler(log)) provided extra set request's context fields. thanks that handler, all our logs will come prepopulated c.append(hlog.accesshandler(func(r *http.request, status, size int, duration time.duration) { hlog.fromrequest(r).info(). str(\"method\", r.method). stringer(\"url\", r.url). int(\"status\", status). int(\"size\", size). dur(\"duration\", duration). msg(\"\") })) c.append(hlog.remoteaddrhandler(\"ip\")) c.append(hlog.useragenthandler(\"user_agent\")) c.append(hlog.refererhandler(\"referer\")) c.append(hlog.requestidhandler(\"req_id\", \"request-id\")) here is your final h c.then(http.handlerfunc(func(w http.responsewriter, r *http.request) get from context. you can safely assume it be always there: if removed, hlog.fromrequest return a no-op logger. str(\"user\", \"current user\"). str(\"status\", \"ok\"). msg(\"something happened\") output: {\"level\":\"info\",\"time\":\"2001-02-03t04:05:06z\",\"role\":\"my-service\",\"host\":\"local-hostname\",\"req_id\":\"b4g0l5t6tfid6dtrapu0\",\"user\":\"current user\",\"status\":\"ok\",\"message\":\"something happened\"} http.handle(\"/\", h) err http.listenandserve(\":8080\", nil); != nil log.fatal().err(err).msg(\"startup failed\") } ``` `log/slog` {#integration-with-logslog} `slog.handler` implementation routes records through lets standard library's `slog` api while keeping zerolog's performance and encoding: main import ( \"log/slog\" \"github.com/rs/zerolog\" \"github.com/rs/zerolog/log\" ) func main() zl log.logger zerolog.newsloghandler(zl) slog.new(handler) logger.info(\"user logged in\", \"user\", \"alice\", \"role\", \"admin\") {\"level\":\"info\",\"user\":\"alice\",\"role\":\"admin\",\"time\":\"...\",\"message\":\"user in\"} supports features including `withattrs`, `withgroup`, nested groups, `logvaluer` resolution. slog levels are mapped (e.g. `slog.leveldebug` `zerolog.debuglevel`). as {#set-as-standard-logger-output} str(\"foo\", \"bar\"). stdlog.setflags(0) stdlog.setoutput(log) stdlog.print(\"hello world\") {\"foo\":\"bar\",\"message\":\"hello world\"} related projects {#related-projects} - [grpc-zerolog](https://github.com/cheaproc/grpc-zerolog): of `grpclog.loggerv2` interface using zerolog. [overlog](https://github.com/trendyol/overlog): `mapped diagnostic context` [zerologr](https://github.com/go-logr/zerologr): `logr.logsink` [logze](https://github.com/maxbolgarin/logze):",
+      "documentId": "guides/integrations",
+      "locale": "en",
+      "contentLocale": "en",
+      "contentVersion": "current",
+      "versionScope": "site",
+      "alternates": [
+        {
+          "locale": "en",
+          "contentVersion": "current",
+          "url": "https://slowwwkiss.github.io/zerolog/guides/integrations.html",
+          "markdown": "https://slowwwkiss.github.io/zerolog/guides/integrations.md"
+        }
+      ]
+    },
+    {
+      "id": "guides/performance.md",
+      "kind": "page",
+      "title": "Performance",
+      "description": "Why zerolog is fast, the benchmark numbers, and the caveats to respect — field duplication, Event pooling, and UpdateContext concurrency.",
+      "tab": "",
+      "url": "https://slowwwkiss.github.io/zerolog/guides/performance.html",
+      "markdown": "https://slowwwkiss.github.io/zerolog/guides/performance.md",
+      "file": "guides/performance.md",
+      "searchText": "# performance {#performance} ## why it is fast {#why-it-is-fast} zerolog's chaining api writes json (or cbor) log events by avoiding allocations and reflection. that the whole design: a level method returns an `event`, field methods append directly to event's buffer, `msg`/`send` buffer once. disabled levels short-circuit before any work happens — guard expensive computation with `e.enabled()` when matters. see [logbench](http://bench.zerolog.io/) for more comprehensive up-to-date benchmarks. all operations are allocation free (those numbers *include* encoding): ```text benchmarklogempty-8 100000000 19.1 ns/op 0 b/op allocs/op benchmarkdisabled-8 500000000 4.07 benchmarkinfo-8 30000000 42.5 benchmarkcontextfields-8 44.9 benchmarklogfields-8 10000000 184 ``` using uber's zap comparison benchmark: message 10 fields: | library time bytes allocated objects :------------------ :---------: :-------------: :---------------: zerolog 767 552 6 848 704 2 (sugared) 1363 1610 20 go-kit 3614 2895 66 lion 5392 5807 63 logrus 5661 6092 78 apex/log 15332 3832 65 log15 20657 5632 93 logger already has fields of context: 52 283 337 80 2702 4074 38 3378 3046 14179 2642 44 static string, without context or `printf`-style templating: :--------: 50 236 standard 453 508 656 13 771 1224 1244 1505 27 2751 11 5181 1592 26 there few go logging benchmarks comparisons include zerolog: [imkira/go-loggers-bench](https://github.com/imkira/go-loggers-bench) [uber-go/zap](https://github.com/uber-go/zap#performance). caveats {#caveats} ### duplication {#field-duplication} note does no de-duplication fields. same key multiple times creates keys in final json: ```go := zerolog.new(os.stderr).with().timestamp().logger() logger.info(). timestamp(). msg(\"dup\") // output: {\"level\":\"info\",\"time\":1494567715,\"time\":1494567715,\"message\":\"dup\"} this case, many consumers will take last value, but not guaranteed; check yours if doubt. concurrency safety {#concurrency-safety} be careful calling `updatecontext`. safe. use `with()` create child logger: func handler(w http.responsewriter, r *http.request) { log.logger.with().logger() add fields, example user-agent from http headers logger.updatecontext(func(c zerolog.context) zerolog.context ... }) } do hold `array`, `dict` references {#do-not-hold-event-array-or-dict-references} `event` object returned `logger` level-specific functions (e.g. `log()`, `trace()`, `debug()`, etc.) `sync.pool` memory pool as soon `msg()`, `msgf()`, `send()`, `msgfunc()` **must not** accessed afterwards. **do reference `*event` while callback your own code. especially important `hook.run()` `hookfunc` `marshalzerologobject(e *event)` `logobjectmarshaler` implementations). `array` `context.createarray()` `event.createarray()` so them within `marshalzerologarray(a *array)` `logarraymarshaler` implementations) code they cleared after being buffered call `context.array()` `event.array()`. *dictionary* `context.createdict()` `event.createdict()` referenced `array.dict()`, `context.dict()`, `event.dict()` pool.",
+      "documentId": "guides/performance",
+      "locale": "en",
+      "contentLocale": "en",
+      "contentVersion": "current",
+      "versionScope": "site",
+      "alternates": [
+        {
+          "locale": "en",
+          "contentVersion": "current",
+          "url": "https://slowwwkiss.github.io/zerolog/guides/performance.html",
+          "markdown": "https://slowwwkiss.github.io/zerolog/guides/performance.md"
+        }
+      ]
+    },
+    {
+      "id": "api/package-root.md",
+      "kind": "page",
+      "title": "github.com/rs/zerolog",
+      "description": "Package zerolog provides a lightweight logging library dedicated to JSON logging.",
+      "tab": "api",
+      "url": "https://slowwwkiss.github.io/zerolog/api/package-root.html",
+      "markdown": "https://slowwwkiss.github.io/zerolog/api/package-root.md",
+      "file": "api/package-root.md",
+      "searchText": "package zerolog provides a lightweight logging library dedicated to json logging. global logger can be used for simple logging: import \"github.com/rs/zerolog/log\" log.info().msg(\"hello world\") // output: {\"time\":1494567715,\"level\":\"info\",\"message\":\"hello world\"} note: the logger, \"log\" subpackage \"github.com/rs/zerolog/log\". fields added log messages: log.info().str(\"foo\", \"bar\").msg(\"hello world\",\"foo\":\"bar\"} create instance manage different outputs: := zerolog.new(os.stderr).with().timestamp().logger() logger.info(). str(\"foo\", \"bar\"). msg(\"hello sub-loggers let you chain loggers with additional context: sublogger log.with().str(\"component\", \"foo\").logger() sublogger.info().msg(\"hello world\",\"component\":\"foo\"} level zerolog.setgloballevel(zerolog.infolevel) log.debug().msg(\"filtered out message\") log.info().msg(\"routed if e log.debug(); e.enabled() { compute output only enabled. value compute() e.str(\"foo\", value).msg(\"some debug } {\"level\":\"info\",\"time\":1494567715,\"routed message\"} customize automatic field names: log.timestampfieldname = \"t\" log.levelfieldname \"p\" log.messagefieldname \"m\" {\"t\":1494567715,\"p\":\"info\",\"m\":\"hello no and message: log.log().str(\"foo\",\"bar\").msg(\"\") {\"time\":1494567715,\"foo\":\"bar\"} add contextual logger: log.logger log.with().str(\"foo\", \"bar\").logger() sample logs: sampled log.sample(&zerolog.basicsampler{n: 10}) sampled.info().msg(\"will logged every 10 messages\") hooks: hook: type severityhook struct{} func (h severityhook) run(e *zerolog.event, zerolog.level, msg string) != zerolog.nolevel e.str(\"severity\", level.string()) use it: var h zerolog.new(os.stdout).hook(h) log.warn().msg(\"\") {\"level\":\"warn\",\"severity\":\"warn\"} ### caveats duplication: there is deduplication out-of-the-box. using same key multiple times creates new in final each time. timestamp(). msg(\"dup\") {\"level\":\"info\",\"time\":1494567715,\"time\":1494567715,\"message\":\"dup\"} this case, many consumers will take last value, but not guaranteed; check yours doubt. concurrency safety: careful when calling updatecontext. it safe. method child handler(w http.responsewriter, r *http.request) safety log.logger.with().logger() context fields, example user-agent from http headers logger.updatecontext(func(c zerolog.context) zerolog.context ... }) ## timeformatunix ```go const ( defines time format that makes serialized as unix timestamp integers. \"\" timeformatunixms integers milliseconds. \"unixms\" timeformatunixmicro microseconds. \"unixmicro\" timeformatunixnano nanoseconds. \"unixnano\" durationformatfloat duration floating point numbers. \"float\" durationformatint \"int\" durationformatstring string. \"string\" ) ``` debuglevel level. iota infolevel info warnlevel warn errorlevel error fatallevel fatal paniclevel panic nolevel an absent disabled disables logger. tracelevel trace -1 timestampfieldname name field. \"time\" levelfieldname \"level\" leveltracevalue \"trace\" leveldebugvalue \"debug\" levelinfovalue \"info\" levelwarnvalue \"warn\" levelerrorvalue \"error\" levelfatalvalue \"fatal\" levelpanicvalue \"panic\" levelfieldmarshalfunc allows customization of marshaling. func(l level) string return l.string() messagefieldname message \"message\" errorfieldname fields. callerfieldname caller \"caller\" callerskipframecount number stack frames skip find caller. 2 callermarshalfunc marshaling func(pc uintptr, file string, line int) + \":\" strconv.itoa(line) errorstackfieldname stacks. \"stack\" errorstackmarshaler extract err any. func(err error) interface{} errormarshalfunc interfacemarshalfunc interface default: \"encoding/json.marshal\" html escaping func(v interface{}) ([]byte, buf bytes.buffer encoder json.newencoder(&buf) encoder.setescapehtml(false) encoder.encode(v) nil nil, b buf.bytes() len(b) > 0 b[:len(b)-1], b, timefieldformat type. set timeformatunix, timeformatunixms, or timeformatunixnano, formatted integer. time.rfc3339 timestampfunc function called generate timestamp. time.now durationfieldformat durationfieldunit unit time.duration dur method. time.millisecond durationfieldinteger renders integer instead float true. deprecated: instead. false errorhandler whenever fails write event on its output. set, printed stderr. handler must thread safe non-blocking. fatalexitfunc by log.fatal() os.exit(1). os.exit(1) called. func() defaultcontextlogger returned ctx() associated context. *logger levelcolors are consolewriter's consoledefaultformatlevel color levels. map[level]int{ tracelevel: colorblue, debuglevel: 0, infolevel: colorgreen, warnlevel: coloryellow, errorlevel: colorred, fatallevel: paniclevel: formattedlevels short name. map[level]string{ \"trc\", \"dbg\", \"inf\", \"wrn\", \"err\", \"ftl\", \"pnc\", triggerlevelwriterbufferreuselimit limit bytes buffer dropped triggerlevelwriter pool grows above limit. 64 * 1024 floatingpointprecision, other than -1, controls digits formatting numbers json. see strconv.formatfloat more details. floatingpointprecision often samples ~ events. randomsampler(10) sometimes 100 randomsampler(100) rarely 1000 randomsampler(1000) arr arr() *array array warning: deprecated because does preserve stack, hooks, parent event. event.createarray context.createarray aslogobjectmarshalers aslogobjectmarshalers[t logobjectmarshaler](objs []t) []logobjectmarshaler asstringers asstringers[t fmt.stringer](objs []fmt.stringer consoletestwriter consoletestwriter(t testinglog) func(w *consolewriter) option correctly sets frame depth testing.tb log. ctx ctx(ctx context.context) returns ctx. associated, returned, unless which case returned. dict dict() *event \\*event.dict call usual methods like str, int etc give argument event.createdict disablesampling disablesampling(v bool) disable sampling all globallevel globallevel() current multilevelwriter multilevelwriter(writers ...io.writer) levelwriter writer duplicates writes provided writers, similar tee(1) command. some writers implement levelwriter, their writelevel write. new(w io.writer) root given writer. implements interface, one. operation single writer's guarantee access serialization your safe, may consider sync wrapper. example: zerolog.new(os.stdout) ```text {\"level\":\"info\",\"message\":\"hello newconsolewriter newconsolewriter(options ...func(w *consolewriter)) consolewriter initializes consolewriter. zerolog.newconsolewriter() out.nocolor true zerolog.new(out) log.debug().str(\"foo\", <nil> dbg hello world foo=bar newlevelhook newlevelhook() levelhook levelhook. newsloghandler newsloghandler(logger logger) *sloghandler slog.handler records zerolog.logger. maps slog levels converts attributes newtestwriter newtestwriter(t testwriter logs testing.tb. nop nop() no-op. parselevel parselevel(levelstr (level, into value. input match known values. setgloballevel setgloballevel(l override values raised, at least globally logs, disabled. syncwriter syncwriter(w io.writer wraps w so synchronized mutex. syncer wrap note do need wrapper os.file operations posix windows systems they already thread-safe. syslogceewriter syslogceewriter(w syslogwriter) syslogwriter sysloglevelwriter adds mitre cee prefix syslog entries, compatible rsyslog syslog-ng support. [https://www.rsyslog.com/json-elasticsearch/](https://www.rsyslog.com/json-elasticsearch/) sysloglevelwriter(w right matching struct contains filtered unexported prepopulate items re-used messages. bool (a *array) bool(b appends val array. bytes(val []byte) dict(dict *event) dur(d time.duration) d err(err serializes errs errs(errs []error) errors float32 float32(f float32) f float64 float64(f float64) hex hex(val ipaddr ipaddr(ip net.ip) net.ip ipv4 ipv6 address ipprefix ipprefix(pfx net.ipnet) net.ipnet (ip mask) int(i i int16 int16(i int16) int32 int32(i int32) int64 int64(i int64) int8 int8(i int8) interface(i marshaled reflection. macaddr macaddr(ha net.hardwareaddr) net.hardwareaddr mac (ethernet) marshalzerologarray (*array) marshalzerologarray(*array) here no-op - since data needed format. object object(obj logobjectmarshaler) marshals logobjectmarshaler rawjson rawjson(val encoded str str(val time(t time.time) t zerolog.timefieldformat. type(val val's reflection uint uint(i uint) uint16 uint16(i uint16) uint32 uint32(i uint32) uint64 uint64(i uint64) uint8 uint8(i uint8) basicsampler n sampler send nth event, regardless `n: uint32`: (s *basicsampler) sample(lvl interface. burstsampler burst maximum per period allowed before nextsampler. period. nextsampler always after reached. events rejected burst. lets pass then decision subsequent rejected. `burst: `period: time.duration`: `nextsampler: sampler`: *burstsampler) destination. nocolor colorized timeformat specifies timelocation tells consolewriter’s default formattimestamp how localize *time.location partsorder order parts []string partsexclude display fieldsorder fieldsexclude formatter formatlevel formatcaller formatmessage formatfieldname formatfieldvalue formaterrfieldname formaterrfieldvalue configured \"part\" has precedence formatpartvaluebyname formatterbyfieldname formatextra func(map[string]interface{}, *bytes.buffer) formatprepare func(map[string]interface{}) parses (optionally) colorized, human-friendly out. `out: io.writer`: `nocolor: bool`: `timeformat: string`: `timelocation: *time.location`: `partsorder: []string`: `partsexclude: `fieldsorder: `fieldsexclude: `formattimestamp: formatter`: `formatlevel: `formatcaller: `formatmessage: `formatfieldname: `formatfieldvalue: `formaterrfieldname: `formaterrfieldvalue: `formatpartvaluebyname: formatterbyfieldname`: `formatextra: error`: `formatprepare: close (w consolewriter) close() underlying io.closer. otherwise nothing. write(p (n int, transforms formatters w.out. zerolog.new(zerolog.consolewriter{out: os.stdout, nocolor: true}) inf configures sub-logger anerr (c context) anerr(key added. any any(key around context.interface. array(key logarraymarshaler) c.createarray() logarraymarshaler context_array zerolog.new(os.stdout).with(). \"bar\") ctx.array(\"array\", ctx.createarray(). str(\"baz\"). int(1), ).logger() logger.log().msg(\"hello {\"foo\":\"bar\",\"array\":[\"baz\",1],\"message\":\"hello bool(key bools bools(key []bool) \\[]bool bytes(key \\[]byte caller() file:line zerolog.callerfieldname key. callerwithskipframecount callerwithskipframecount(skipframecount specified skipframecount context's respective used. createarray createarray() context.array preserves elements createdict createdict() context.dict context.context rendered message, made available hooks use. typical tracing information context.context. dict(key context_dict ctx.dict(\"dict\", ctx.createdict(). str(\"bar\", \"baz\"). int(\"n\", 1), {\"foo\":\"bar\",\"dict\":{\"bar\":\"baz\",\"n\":1},\"message\":\"hello dur(key divided stored float. context_dur time.second dur(\"dur\", d). logger() log.log().msg(\"hello {\"foo\":\"bar\",\"dur\":10000,\"message\":\"hello durs durs(key []time.duration) context_durs []time.duration{ time.second, 20 durs(\"durs\", {\"foo\":\"bar\",\"durs\":[10000,20000],\"message\":\"hello embedobject embedobject(obj embeds context_embedobject price price{val: 6449, prec: 2, unit: \"$\"} embedobject(price). {\"foo\":\"bar\",\"price\":\"$64.49\",\"message\":\"hello errs(key fields(fields helper map slice assertion. map\\[string]interface{} \\[]interface{} accepted. alternate keys arbitrary values, extraneous ones ignored. float32(key float64(key floats32 floats32(key []float32) \\[]float32 floats64 floats64(key []float64) \\[]float64 hex(key ipaddr(key ip context_ipaddr hostip net.ip{192, 168, 100} ipaddr(\"hostip\", hostip). {\"hostip\":\"192.168.0.100\",\"message\":\"hello ipaddrs ipaddrs(key []net.ip) \\[]net.ip context_ipaddrs ipaddrs(\"hostip\", []net.ip{hostip}). {\"hostip\":[\"192.168.0.100\"],\"message\":\"hello ipprefix(key pfx \\[]net.ipnet (address context_ipprefix route net.ipnet{ip: 0}, mask: net.cidrmask(24, 32)} ipprefix(\"route\", route). {\"route\":\"192.168.0.0/24\",\"message\":\"hello ipprefixes ipprefixes(key []net.ipnet) context_ipprefixes ipprefixes(\"route\", []net.ipnet{route}). {\"route\":[\"192.168.0.0/24\"],\"message\":\"hello int(key int16(key int32(key int64(key int8(key interface(key obj context_interface `json:\"name\"` }{ name: \"john\", interface(\"obj\", obj). {\"foo\":\"bar\",\"obj\":{\"name\":\"john\"},\"message\":\"hello ints ints(key []int) \\[]int ints16 ints16(key []int16) \\[]int16 ints32 ints32(key []int32) \\[]int32 ints64 ints64(key []int64) \\[]int64 ints8 ints8(key []int8) \\[]int8 previously set. macaddr(key ha context_macaddr net.hardwareaddr{0x00, 0x14, 0x22, 0x01, 0x23, 0x45} macaddr(\"hostmac\", mac). {\"hostmac\":\"00:14:22:01:23:45\",\"message\":\"hello object(key context_object u user{\"john\", 35, time.time{}} object(\"user\", u). {\"foo\":\"bar\",\"user\":{\"name\":\"john\",\"age\":35,\"created\":\"0001-01-01t00:00:00z\"},\"message\":\"hello objects objects(key objs []logobjectmarshaler) version accepts objects. context_objects u2 user{\"bono\", 54, objects(\"users\", []zerolog.logobjectmarshaler{u, u2}). {\"foo\":\"bar\",\"users\":[{\"name\":\"john\",\"age\":35,\"created\":\"0001-01-01t00:00:00z\"},{\"name\":\"bono\",\"age\":54,\"created\":\"0001-01-01t00:00:00z\"}],\"message\":\"hello objectsv objectsv(key ...logobjectmarshaler) variadic list individual context_objectsv objectsv(\"users\", u, u2). rawjson(key sanity performed b; contain carriage valid reset reset() removes stack() enables printing passed err(). str(key, stringer stringer(key fmt.stringer) val.string() (or null nil) stringers stringers(key vals []fmt.stringer) where val.string(). fmt.stringer stringersv stringersv(key ...fmt.stringer) context_stringersv net.ipv4bcast net.ipv4allrouter stringersv(\"ips\", a, b). {\"ips\":[\"255.255.255.255\",\"224.0.0.2\"],\"message\":\"hello strs strs(key []string) strsv strsv(key ...string) \\[]string strings. time(key times(key []time.time) context_times t1 time.time{} t2 t1.add(time.second 10) []time.time{t1, t2} times(\"times\", t). {\"foo\":\"bar\",\"times\":[\"0001-01-01t00:00:00z\",\"0001-01-01t00:00:10z\"],\"message\":\"hello timestamp() local key, name, change zerolog.timestampfieldname. format, won't dedupe \\*context one already. type(key uint(key uint16(key uint32(key uint64(key uint8(key uints uints(key []uint) \\[]uint uints16 uints16(key []uint16) \\[]uint16 uints32 uints32(key []uint32) \\[]uint32 uints64 uints64(key []uint64) \\[]uint64 uints8 uints8(key []uint8) \\[]uint8 represents instanced finalized msgf (e \\*event event.interface. e.createarray() event_array log.log(). e.array(\"array\", e.createarray(). int(1). dict(e.createdict(). ), ). {\"foo\":\"bar\",\"array\":[\"baz\",1,{\"bar\":\"baz\",\"n\":1}],\"message\":\"hello runes outside normal ascii ranges hex-encoded resulting caller(skip ...int) ascend passed, variable callerskipframe callerskipframe(skip instructs future calls frames. includes those via \\*event.array go getctx() accessor. e.createdict() dictionary. event_dict e.dict(\"dict\", e.createdict(). discard discard() msg(f) print it. zerolog.durationfieldunit. zerolog.durationfieldinteger true, durations event_dur event_durs event_embedobject enabled enabled() going sampling. zerolog.errorfieldname. been zerolog.errorstackmarshaler defined, result appended zerolog.errorstackfieldname. func(f func(e *event)) anonymous run getctx retrieves optionally functions retrieve useful tracing, span commonly propagated prefixes event_interface msg(msg sends empty. notice: once called, should disposed. twice have unexpected result. msgfunc msgfunc(createmsg msgf(format v ...interface{}) event_object event_objects users []user{u, u2} zerolog.aslogobjectmarshalers(users)). {\"users\":[{\"name\":\"john\",\"age\":35,\"created\":\"0001-01-01t00:00:00z\"},{\"name\":\"bono\",\"age\":54,\"created\":\"0001-01-01t00:00:00z\"}],\"message\":\"hello event_objectsv rawcbor rawcbor(key cbor under full featureset supported mapped data-url send() equivalent msg(\"\"). something. without string(). event_stringers net.ip{127, 1} 2} ips []net.ip{a, b} stringers(\"ips\", zerolog.asstringers(ips)). {\"ips\":[\"127.0.0.1\",\"127.0.0.2\"],\"message\":\"hello timediff timediff(key time.time, start positive between start. greater start, 0. follows principle dur(). \\*context) filteredlevelwriter combination want destinations just filter early. lowest writers. `writer: levelwriter`: `level: level`: *filteredlevelwriter) (int, writelevel(level level, p equal func(interface{}) func(interface{}, being able differentiate based hook runs *event, hook. `run: string)`: hookfunc adaptor allow ordinary hookfunc) marshaltext (l marshaltext() encoding.textmarshaler easy writing toml/yaml/json formats string() unmarshaltext *level) unmarshaltext(text encoding.textunmarshaler reading nolevelhook, tracehook, debughook, infohook, warnhook, errorhook, fatalhook, panichook applies `nolevelhook: hook`: `tracehook: `debughook: `infohook: `warnhook: `errorhook: `fatalhook: `panichook: levelhook) levelsampler tracesampler, debugsampler, infosampler, warnsampler, errorsampler `tracesampler: `debugsampler: `infosampler: `warnsampler: `errorsampler: levelsampler) receive payload. `io.writer: `writelevel: func(level error)`: levelwriteradapter adapts support (lw levelwriteradapter) writelevel(l simply everything adapted writer, ignoring marshalzerologarray(a strongly-typed encoding-agnostic implemented types event/context's methods. `marshalzerologarray: func(a *array)`: marshalzerologobject(e `marshalzerologobject: *event)`: active generates lines io.writer. *logger) debug() starts logger_debug log.debug(). 123). {\"level\":\"debug\",\"foo\":\"bar\",\"n\":123,\"message\":\"hello nil. error() logger_error log.error(). err(errors.new(\"some error\")). msg(\"error doing something\") {\"level\":\"error\",\"error\":\"some error\",\"message\":\"error something\"} fatal() interceptor method, terminates program immediately os.exit(1), desired behavior setting fatalexitfunc. getlevel getlevel() l. hook(hooks ...hook) logger_hook levelnamehook messagehook \"the message\" zerolog.new(os.stdout).hook(levelnamehook, messagehook) {\"level\":\"info\",\"level_name\":\"info\",\"the_message\":\"hello world\",\"message\":\"hello info() logger_info log.info(). {\"level\":\"info\",\"foo\":\"bar\",\"n\":123,\"message\":\"hello level(lvl minimum accepted logger_level zerolog.new(os.stdout).level(zerolog.warnlevel) log.info().msg(\"filtered log.error().msg(\"kept {\"level\":\"error\",\"message\":\"kept log() still produced logger_log msg(\"\") {\"foo\":\"bar\",\"bar\":\"baz\"} output(w panic() stops flow goroutine. print(v extra arguments handled manner fmt.print. logger_print log.print(\"hello {\"level\":\"debug\",\"message\":\"hello printf printf(format fmt.printf. logger_printf log.printf(\"hello %s\", \"world\") println println(v fmt.println. logger_println log.println(\"hello world\\n\"} sample(s sampler) s sampler. logger_sample zerolog.new(os.stdout).sample(&zerolog.basicsampler{n: 2}) log.info().msg(\"message 1\") 2\") 3\") 4\") {\"level\":\"info\",\"message\":\"message 1\"} 3\"} trace() logger_trace log.trace(). {\"level\":\"trace\",\"foo\":\"bar\",\"n\":123,\"message\":\"hello updatecontext updatecontext(update func(c updates internal logger's caution: modifying concurrent goroutines. warn() logger_warn log.warn(). msg(\"a warning {\"level\":\"warn\",\"foo\":\"bar\",\"message\":\"a with() logger_with zerolog.new(os.stdout). with(). {\"level\":\"info\",\"foo\":\"bar\",\"message\":\"hello withcontext withcontext(ctx copy receiver attached. attached (if any) affected. receiver's modify existing (instead replacing context), following notation: r.context() l zerolog.ctx(ctx) l.updatecontext(func(c c.str(\"bar\", \"baz\") withlevel withlevel(level unlike methods, terminate stop goroutine logger_withlevel log.withlevel(zerolog.infolevel). standard logger_write stdlog.setflags(0) stdlog.setoutput(log) stdlog.print(\"hello {\"foo\":\"bar\",\"message\":\"hello randomsampler prng randomly events, randomsampler) part sample, dropped. `sample: func(lvl sloghandler zerolog.logger backend. code uses library's through zerolog. *sloghandler) enabled(_ context.context, slog.level) reports whether handles mirrors logger.should's checks (without sampling). handle handle(ctx record slog.record) record. slog.record withattrs withattrs(attrs []slog.attr) pre-attached. these included withgroup withgroup(name group nested debug(m info(m warning(m err(m emerg(m crit(m syslog.writer struct. `debug: func(m `info: `warning: `err: `emerg: `crit: testinglog skips capture original `t: testinglog`: `frame: int`: (t testwriter) log(args logf(format args helper() `log: func(args ...interface{})`: `logf: func(format `helper: func()`: destination (usually), conditionallevel (and below) buffered until trigger higher) emitted. usually debuglevel. triggerlevel triggers sending conditional lines. errorlevel. buffers below higher written never happens, configure \"log request\". `conditionallevel: `triggerlevel: *triggerlevelwriter) closes pool. trigger() forces flushing state triggered, triggered before.",
+      "symbols": [
+        {
+          "name": "const TimeFormatUnix",
+          "kind": "go constant",
+          "anchor": "const-TimeFormatUnix"
+        },
+        {
+          "name": "const TimeFormatUnixMs",
+          "kind": "go constant",
+          "anchor": "const-TimeFormatUnixMs"
+        },
+        {
+          "name": "const TimeFormatUnixMicro",
+          "kind": "go constant",
+          "anchor": "const-TimeFormatUnixMicro"
+        },
+        {
+          "name": "const TimeFormatUnixNano",
+          "kind": "go constant",
+          "anchor": "const-TimeFormatUnixNano"
+        },
+        {
+          "name": "const DurationFormatFloat",
+          "kind": "go constant",
+          "anchor": "const-DurationFormatFloat"
+        },
+        {
+          "name": "const DurationFormatInt",
+          "kind": "go constant",
+          "anchor": "const-DurationFormatInt"
+        },
+        {
+          "name": "const DurationFormatString",
+          "kind": "go constant",
+          "anchor": "const-DurationFormatString"
+        },
+        {
+          "name": "const DebugLevel",
+          "kind": "go constant",
+          "anchor": "const-DebugLevel"
+        },
+        {
+          "name": "const InfoLevel",
+          "kind": "go constant",
+          "anchor": "const-InfoLevel"
+        },
+        {
+          "name": "const WarnLevel",
+          "kind": "go constant",
+          "anchor": "const-WarnLevel"
+        },
+        {
+          "name": "const ErrorLevel",
+          "kind": "go constant",
+          "anchor": "const-ErrorLevel"
+        },
+        {
+          "name": "const FatalLevel",
+          "kind": "go constant",
+          "anchor": "const-FatalLevel"
+        },
+        {
+          "name": "const PanicLevel",
+          "kind": "go constant",
+          "anchor": "const-PanicLevel"
+        },
+        {
+          "name": "const NoLevel",
+          "kind": "go constant",
+          "anchor": "const-NoLevel"
+        },
+        {
+          "name": "const Disabled",
+          "kind": "go constant",
+          "anchor": "const-Disabled"
+        },
+        {
+          "name": "const TraceLevel",
+          "kind": "go constant",
+          "anchor": "const-TraceLevel"
+        },
+        {
+          "name": "var TimestampFieldName",
+          "kind": "go variable",
+          "anchor": "var-TimestampFieldName"
+        },
+        {
+          "name": "var LevelFieldName",
+          "kind": "go variable",
+          "anchor": "var-LevelFieldName"
+        },
+        {
+          "name": "var LevelTraceValue",
+          "kind": "go variable",
+          "anchor": "var-LevelTraceValue"
+        },
+        {
+          "name": "var LevelDebugValue",
+          "kind": "go variable",
+          "anchor": "var-LevelDebugValue"
+        },
+        {
+          "name": "var LevelInfoValue",
+          "kind": "go variable",
+          "anchor": "var-LevelInfoValue"
+        },
+        {
+          "name": "var LevelWarnValue",
+          "kind": "go variable",
+          "anchor": "var-LevelWarnValue"
+        },
+        {
+          "name": "var LevelErrorValue",
+          "kind": "go variable",
+          "anchor": "var-LevelErrorValue"
+        },
+        {
+          "name": "var LevelFatalValue",
+          "kind": "go variable",
+          "anchor": "var-LevelFatalValue"
+        },
+        {
+          "name": "var LevelPanicValue",
+          "kind": "go variable",
+          "anchor": "var-LevelPanicValue"
+        },
+        {
+          "name": "var LevelFieldMarshalFunc",
+          "kind": "go variable",
+          "anchor": "var-LevelFieldMarshalFunc"
+        },
+        {
+          "name": "var MessageFieldName",
+          "kind": "go variable",
+          "anchor": "var-MessageFieldName"
+        },
+        {
+          "name": "var ErrorFieldName",
+          "kind": "go variable",
+          "anchor": "var-ErrorFieldName"
+        },
+        {
+          "name": "var CallerFieldName",
+          "kind": "go variable",
+          "anchor": "var-CallerFieldName"
+        },
+        {
+          "name": "var CallerSkipFrameCount",
+          "kind": "go variable",
+          "anchor": "var-CallerSkipFrameCount"
+        },
+        {
+          "name": "var CallerMarshalFunc",
+          "kind": "go variable",
+          "anchor": "var-CallerMarshalFunc"
+        },
+        {
+          "name": "var ErrorStackFieldName",
+          "kind": "go variable",
+          "anchor": "var-ErrorStackFieldName"
+        },
+        {
+          "name": "var ErrorStackMarshaler",
+          "kind": "go variable",
+          "anchor": "var-ErrorStackMarshaler"
+        },
+        {
+          "name": "var ErrorMarshalFunc",
+          "kind": "go variable",
+          "anchor": "var-ErrorMarshalFunc"
+        },
+        {
+          "name": "var InterfaceMarshalFunc",
+          "kind": "go variable",
+          "anchor": "var-InterfaceMarshalFunc"
+        },
+        {
+          "name": "var TimeFieldFormat",
+          "kind": "go variable",
+          "anchor": "var-TimeFieldFormat"
+        },
+        {
+          "name": "var TimestampFunc",
+          "kind": "go variable",
+          "anchor": "var-TimestampFunc"
+        },
+        {
+          "name": "var DurationFieldFormat",
+          "kind": "go variable",
+          "anchor": "var-DurationFieldFormat"
+        },
+        {
+          "name": "var DurationFieldUnit",
+          "kind": "go variable",
+          "anchor": "var-DurationFieldUnit"
+        },
+        {
+          "name": "var DurationFieldInteger",
+          "kind": "go variable",
+          "anchor": "var-DurationFieldInteger"
+        },
+        {
+          "name": "var ErrorHandler",
+          "kind": "go variable",
+          "anchor": "var-ErrorHandler"
+        },
+        {
+          "name": "var FatalExitFunc",
+          "kind": "go variable",
+          "anchor": "var-FatalExitFunc"
+        },
+        {
+          "name": "var DefaultContextLogger",
+          "kind": "go variable",
+          "anchor": "var-DefaultContextLogger"
+        },
+        {
+          "name": "var LevelColors",
+          "kind": "go variable",
+          "anchor": "var-LevelColors"
+        },
+        {
+          "name": "var FormattedLevels",
+          "kind": "go variable",
+          "anchor": "var-FormattedLevels"
+        },
+        {
+          "name": "var TriggerLevelWriterBufferReuseLimit",
+          "kind": "go variable",
+          "anchor": "var-TriggerLevelWriterBufferReuseLimit"
+        },
+        {
+          "name": "var FloatingPointPrecision",
+          "kind": "go variable",
+          "anchor": "var-FloatingPointPrecision"
+        },
+        {
+          "name": "var Often",
+          "kind": "go variable",
+          "anchor": "var-Often"
+        },
+        {
+          "name": "var Sometimes",
+          "kind": "go variable",
+          "anchor": "var-Sometimes"
+        },
+        {
+          "name": "var Rarely",
+          "kind": "go variable",
+          "anchor": "var-Rarely"
+        },
+        {
+          "name": "func Arr() *Array",
+          "kind": "go function",
+          "anchor": "func-Arr"
+        },
+        {
+          "name": "func AsLogObjectMarshalers[T LogObjectMarshaler](objs []T) []LogObjectMarshaler",
+          "kind": "go function",
+          "anchor": "func-AsLogObjectMarshalers"
+        },
+        {
+          "name": "func AsStringers[T fmt.Stringer](objs []T) []fmt.Stringer",
+          "kind": "go function",
+          "anchor": "func-AsStringers"
+        },
+        {
+          "name": "func ConsoleTestWriter(t TestingLog) func(w *ConsoleWriter)",
+          "kind": "go function",
+          "anchor": "func-ConsoleTestWriter"
+        },
+        {
+          "name": "func Ctx(ctx context.Context) *Logger",
+          "kind": "go function",
+          "anchor": "func-Ctx"
+        },
+        {
+          "name": "func Dict() *Event",
+          "kind": "go function",
+          "anchor": "func-Dict"
+        },
+        {
+          "name": "func DisableSampling(v bool)",
+          "kind": "go function",
+          "anchor": "func-DisableSampling"
+        },
+        {
+          "name": "func GlobalLevel() Level",
+          "kind": "go function",
+          "anchor": "func-GlobalLevel"
+        },
+        {
+          "name": "func MultiLevelWriter(writers ...io.Writer) LevelWriter",
+          "kind": "go function",
+          "anchor": "func-MultiLevelWriter"
+        },
+        {
+          "name": "func New(w io.Writer) Logger",
+          "kind": "go function",
+          "anchor": "func-New"
+        },
+        {
+          "name": "Example New",
+          "kind": "go example",
+          "anchor": "func-New"
+        },
+        {
+          "name": "func NewConsoleWriter(options ...func(w *ConsoleWriter)) ConsoleWriter",
+          "kind": "go function",
+          "anchor": "func-NewConsoleWriter"
+        },
+        {
+          "name": "Example NewConsoleWriter",
+          "kind": "go example",
+          "anchor": "func-NewConsoleWriter"
+        },
+        {
+          "name": "func NewLevelHook() LevelHook",
+          "kind": "go function",
+          "anchor": "func-NewLevelHook"
+        },
+        {
+          "name": "func NewSlogHandler(logger Logger) *SlogHandler",
+          "kind": "go function",
+          "anchor": "func-NewSlogHandler"
+        },
+        {
+          "name": "func NewTestWriter(t TestingLog) TestWriter",
+          "kind": "go function",
+          "anchor": "func-NewTestWriter"
+        },
+        {
+          "name": "func Nop() Logger",
+          "kind": "go function",
+          "anchor": "func-Nop"
+        },
+        {
+          "name": "func ParseLevel(levelStr string) (Level, error)",
+          "kind": "go function",
+          "anchor": "func-ParseLevel"
+        },
+        {
+          "name": "func SetGlobalLevel(l Level)",
+          "kind": "go function",
+          "anchor": "func-SetGlobalLevel"
+        },
+        {
+          "name": "func SyncWriter(w io.Writer) io.Writer",
+          "kind": "go function",
+          "anchor": "func-SyncWriter"
+        },
+        {
+          "name": "func SyslogCEEWriter(w SyslogWriter) LevelWriter",
+          "kind": "go function",
+          "anchor": "func-SyslogCEEWriter"
+        },
+        {
+          "name": "func SyslogLevelWriter(w SyslogWriter) LevelWriter",
+          "kind": "go function",
+          "anchor": "func-SyslogLevelWriter"
+        },
+        {
+          "name": "type Array",
+          "kind": "go type",
+          "anchor": "type-Array"
+        },
+        {
+          "name": "Array.Bool",
+          "kind": "go method",
+          "anchor": "method-Array-Bool"
+        },
+        {
+          "name": "Array.Bytes",
+          "kind": "go method",
+          "anchor": "method-Array-Bytes"
+        },
+        {
+          "name": "Array.Dict",
+          "kind": "go method",
+          "anchor": "method-Array-Dict"
+        },
+        {
+          "name": "Array.Dur",
+          "kind": "go method",
+          "anchor": "method-Array-Dur"
+        },
+        {
+          "name": "Array.Err",
+          "kind": "go method",
+          "anchor": "method-Array-Err"
+        },
+        {
+          "name": "Array.Errs",
+          "kind": "go method",
+          "anchor": "method-Array-Errs"
+        },
+        {
+          "name": "Array.Float32",
+          "kind": "go method",
+          "anchor": "method-Array-Float32"
+        },
+        {
+          "name": "Array.Float64",
+          "kind": "go method",
+          "anchor": "method-Array-Float64"
+        },
+        {
+          "name": "Array.Hex",
+          "kind": "go method",
+          "anchor": "method-Array-Hex"
+        },
+        {
+          "name": "Array.IPAddr",
+          "kind": "go method",
+          "anchor": "method-Array-IPAddr"
+        },
+        {
+          "name": "Array.IPPrefix",
+          "kind": "go method",
+          "anchor": "method-Array-IPPrefix"
+        },
+        {
+          "name": "Array.Int",
+          "kind": "go method",
+          "anchor": "method-Array-Int"
+        },
+        {
+          "name": "Array.Int16",
+          "kind": "go method",
+          "anchor": "method-Array-Int16"
+        },
+        {
+          "name": "Array.Int32",
+          "kind": "go method",
+          "anchor": "method-Array-Int32"
+        },
+        {
+          "name": "Array.Int64",
+          "kind": "go method",
+          "anchor": "method-Array-Int64"
+        },
+        {
+          "name": "Array.Int8",
+          "kind": "go method",
+          "anchor": "method-Array-Int8"
+        },
+        {
+          "name": "Array.Interface",
+          "kind": "go method",
+          "anchor": "method-Array-Interface"
+        },
+        {
+          "name": "Array.MACAddr",
+          "kind": "go method",
+          "anchor": "method-Array-MACAddr"
+        },
+        {
+          "name": "Array.MarshalZerologArray",
+          "kind": "go method",
+          "anchor": "method-Array-MarshalZerologArray"
+        },
+        {
+          "name": "Array.Object",
+          "kind": "go method",
+          "anchor": "method-Array-Object"
+        },
+        {
+          "name": "Array.RawJSON",
+          "kind": "go method",
+          "anchor": "method-Array-RawJSON"
+        },
+        {
+          "name": "Array.Str",
+          "kind": "go method",
+          "anchor": "method-Array-Str"
+        },
+        {
+          "name": "Array.Time",
+          "kind": "go method",
+          "anchor": "method-Array-Time"
+        },
+        {
+          "name": "Array.Type",
+          "kind": "go method",
+          "anchor": "method-Array-Type"
+        },
+        {
+          "name": "Array.Uint",
+          "kind": "go method",
+          "anchor": "method-Array-Uint"
+        },
+        {
+          "name": "Array.Uint16",
+          "kind": "go method",
+          "anchor": "method-Array-Uint16"
+        },
+        {
+          "name": "Array.Uint32",
+          "kind": "go method",
+          "anchor": "method-Array-Uint32"
+        },
+        {
+          "name": "Array.Uint64",
+          "kind": "go method",
+          "anchor": "method-Array-Uint64"
+        },
+        {
+          "name": "Array.Uint8",
+          "kind": "go method",
+          "anchor": "method-Array-Uint8"
+        },
+        {
+          "name": "type BasicSampler",
+          "kind": "go type",
+          "anchor": "type-BasicSampler"
+        },
+        {
+          "name": "BasicSampler.Sample",
+          "kind": "go method",
+          "anchor": "method-BasicSampler-Sample"
+        },
+        {
+          "name": "type BurstSampler",
+          "kind": "go type",
+          "anchor": "type-BurstSampler"
+        },
+        {
+          "name": "BurstSampler.Sample",
+          "kind": "go method",
+          "anchor": "method-BurstSampler-Sample"
+        },
+        {
+          "name": "type ConsoleWriter",
+          "kind": "go type",
+          "anchor": "type-ConsoleWriter"
+        },
+        {
+          "name": "ConsoleWriter.Close",
+          "kind": "go method",
+          "anchor": "method-ConsoleWriter-Close"
+        },
+        {
+          "name": "ConsoleWriter.Write",
+          "kind": "go method",
+          "anchor": "method-ConsoleWriter-Write"
+        },
+        {
+          "name": "Example ConsoleWriter",
+          "kind": "go example",
+          "anchor": "type-ConsoleWriter"
+        },
+        {
+          "name": "type Context",
+          "kind": "go type",
+          "anchor": "type-Context"
+        },
+        {
+          "name": "Context.AnErr",
+          "kind": "go method",
+          "anchor": "method-Context-AnErr"
+        },
+        {
+          "name": "Context.Any",
+          "kind": "go method",
+          "anchor": "method-Context-Any"
+        },
+        {
+          "name": "Context.Array",
+          "kind": "go method",
+          "anchor": "method-Context-Array"
+        },
+        {
+          "name": "Example Context.Array",
+          "kind": "go example",
+          "anchor": "method-Context-Array"
+        },
+        {
+          "name": "Context.Bool",
+          "kind": "go method",
+          "anchor": "method-Context-Bool"
+        },
+        {
+          "name": "Context.Bools",
+          "kind": "go method",
+          "anchor": "method-Context-Bools"
+        },
+        {
+          "name": "Context.Bytes",
+          "kind": "go method",
+          "anchor": "method-Context-Bytes"
+        },
+        {
+          "name": "Context.Caller",
+          "kind": "go method",
+          "anchor": "method-Context-Caller"
+        },
+        {
+          "name": "Context.CallerWithSkipFrameCount",
+          "kind": "go method",
+          "anchor": "method-Context-CallerWithSkipFrameCount"
+        },
+        {
+          "name": "Context.CreateArray",
+          "kind": "go method",
+          "anchor": "method-Context-CreateArray"
+        },
+        {
+          "name": "Context.CreateDict",
+          "kind": "go method",
+          "anchor": "method-Context-CreateDict"
+        },
+        {
+          "name": "Context.Ctx",
+          "kind": "go method",
+          "anchor": "method-Context-Ctx"
+        },
+        {
+          "name": "Context.Dict",
+          "kind": "go method",
+          "anchor": "method-Context-Dict"
+        },
+        {
+          "name": "Example Context.Dict",
+          "kind": "go example",
+          "anchor": "method-Context-Dict"
+        },
+        {
+          "name": "Context.Dur",
+          "kind": "go method",
+          "anchor": "method-Context-Dur"
+        },
+        {
+          "name": "Example Context.Dur",
+          "kind": "go example",
+          "anchor": "method-Context-Dur"
+        },
+        {
+          "name": "Context.Durs",
+          "kind": "go method",
+          "anchor": "method-Context-Durs"
+        },
+        {
+          "name": "Example Context.Durs",
+          "kind": "go example",
+          "anchor": "method-Context-Durs"
+        },
+        {
+          "name": "Context.EmbedObject",
+          "kind": "go method",
+          "anchor": "method-Context-EmbedObject"
+        },
+        {
+          "name": "Example Context.EmbedObject",
+          "kind": "go example",
+          "anchor": "method-Context-EmbedObject"
+        },
+        {
+          "name": "Context.Err",
+          "kind": "go method",
+          "anchor": "method-Context-Err"
+        },
+        {
+          "name": "Context.Errs",
+          "kind": "go method",
+          "anchor": "method-Context-Errs"
+        },
+        {
+          "name": "Context.Fields",
+          "kind": "go method",
+          "anchor": "method-Context-Fields"
+        },
+        {
+          "name": "Context.Float32",
+          "kind": "go method",
+          "anchor": "method-Context-Float32"
+        },
+        {
+          "name": "Context.Float64",
+          "kind": "go method",
+          "anchor": "method-Context-Float64"
+        },
+        {
+          "name": "Context.Floats32",
+          "kind": "go method",
+          "anchor": "method-Context-Floats32"
+        },
+        {
+          "name": "Context.Floats64",
+          "kind": "go method",
+          "anchor": "method-Context-Floats64"
+        },
+        {
+          "name": "Context.Hex",
+          "kind": "go method",
+          "anchor": "method-Context-Hex"
+        },
+        {
+          "name": "Context.IPAddr",
+          "kind": "go method",
+          "anchor": "method-Context-IPAddr"
+        },
+        {
+          "name": "Example Context.IPAddr",
+          "kind": "go example",
+          "anchor": "method-Context-IPAddr"
+        },
+        {
+          "name": "Context.IPAddrs",
+          "kind": "go method",
+          "anchor": "method-Context-IPAddrs"
+        },
+        {
+          "name": "Example Context.IPAddrs",
+          "kind": "go example",
+          "anchor": "method-Context-IPAddrs"
+        },
+        {
+          "name": "Context.IPPrefix",
+          "kind": "go method",
+          "anchor": "method-Context-IPPrefix"
+        },
+        {
+          "name": "Example Context.IPPrefix",
+          "kind": "go example",
+          "anchor": "method-Context-IPPrefix"
+        },
+        {
+          "name": "Context.IPPrefixes",
+          "kind": "go method",
+          "anchor": "method-Context-IPPrefixes"
+        },
+        {
+          "name": "Example Context.IPPrefixes",
+          "kind": "go example",
+          "anchor": "method-Context-IPPrefixes"
+        },
+        {
+          "name": "Context.Int",
+          "kind": "go method",
+          "anchor": "method-Context-Int"
+        },
+        {
+          "name": "Context.Int16",
+          "kind": "go method",
+          "anchor": "method-Context-Int16"
+        },
+        {
+          "name": "Context.Int32",
+          "kind": "go method",
+          "anchor": "method-Context-Int32"
+        },
+        {
+          "name": "Context.Int64",
+          "kind": "go method",
+          "anchor": "method-Context-Int64"
+        },
+        {
+          "name": "Context.Int8",
+          "kind": "go method",
+          "anchor": "method-Context-Int8"
+        },
+        {
+          "name": "Context.Interface",
+          "kind": "go method",
+          "anchor": "method-Context-Interface"
+        },
+        {
+          "name": "Example Context.Interface",
+          "kind": "go example",
+          "anchor": "method-Context-Interface"
+        },
+        {
+          "name": "Context.Ints",
+          "kind": "go method",
+          "anchor": "method-Context-Ints"
+        },
+        {
+          "name": "Context.Ints16",
+          "kind": "go method",
+          "anchor": "method-Context-Ints16"
+        },
+        {
+          "name": "Context.Ints32",
+          "kind": "go method",
+          "anchor": "method-Context-Ints32"
+        },
+        {
+          "name": "Context.Ints64",
+          "kind": "go method",
+          "anchor": "method-Context-Ints64"
+        },
+        {
+          "name": "Context.Ints8",
+          "kind": "go method",
+          "anchor": "method-Context-Ints8"
+        },
+        {
+          "name": "Context.Logger",
+          "kind": "go method",
+          "anchor": "method-Context-Logger"
+        },
+        {
+          "name": "Context.MACAddr",
+          "kind": "go method",
+          "anchor": "method-Context-MACAddr"
+        },
+        {
+          "name": "Example Context.MACAddr",
+          "kind": "go example",
+          "anchor": "method-Context-MACAddr"
+        },
+        {
+          "name": "Context.Object",
+          "kind": "go method",
+          "anchor": "method-Context-Object"
+        },
+        {
+          "name": "Example Context.Object",
+          "kind": "go example",
+          "anchor": "method-Context-Object"
+        },
+        {
+          "name": "Context.Objects",
+          "kind": "go method",
+          "anchor": "method-Context-Objects"
+        },
+        {
+          "name": "Example Context.Objects",
+          "kind": "go example",
+          "anchor": "method-Context-Objects"
+        },
+        {
+          "name": "Context.ObjectsV",
+          "kind": "go method",
+          "anchor": "method-Context-ObjectsV"
+        },
+        {
+          "name": "Example Context.ObjectsV",
+          "kind": "go example",
+          "anchor": "method-Context-ObjectsV"
+        },
+        {
+          "name": "Context.RawJSON",
+          "kind": "go method",
+          "anchor": "method-Context-RawJSON"
+        },
+        {
+          "name": "Context.Reset",
+          "kind": "go method",
+          "anchor": "method-Context-Reset"
+        },
+        {
+          "name": "Context.Stack",
+          "kind": "go method",
+          "anchor": "method-Context-Stack"
+        },
+        {
+          "name": "Context.Str",
+          "kind": "go method",
+          "anchor": "method-Context-Str"
+        },
+        {
+          "name": "Context.Stringer",
+          "kind": "go method",
+          "anchor": "method-Context-Stringer"
+        },
+        {
+          "name": "Context.Stringers",
+          "kind": "go method",
+          "anchor": "method-Context-Stringers"
+        },
+        {
+          "name": "Context.StringersV",
+          "kind": "go method",
+          "anchor": "method-Context-StringersV"
+        },
+        {
+          "name": "Example Context.StringersV",
+          "kind": "go example",
+          "anchor": "method-Context-StringersV"
+        },
+        {
+          "name": "Context.Strs",
+          "kind": "go method",
+          "anchor": "method-Context-Strs"
+        },
+        {
+          "name": "Context.StrsV",
+          "kind": "go method",
+          "anchor": "method-Context-StrsV"
+        },
+        {
+          "name": "Context.Time",
+          "kind": "go method",
+          "anchor": "method-Context-Time"
+        },
+        {
+          "name": "Context.Times",
+          "kind": "go method",
+          "anchor": "method-Context-Times"
+        },
+        {
+          "name": "Example Context.Times",
+          "kind": "go example",
+          "anchor": "method-Context-Times"
+        },
+        {
+          "name": "Context.Timestamp",
+          "kind": "go method",
+          "anchor": "method-Context-Timestamp"
+        },
+        {
+          "name": "Context.Type",
+          "kind": "go method",
+          "anchor": "method-Context-Type"
+        },
+        {
+          "name": "Context.Uint",
+          "kind": "go method",
+          "anchor": "method-Context-Uint"
+        },
+        {
+          "name": "Context.Uint16",
+          "kind": "go method",
+          "anchor": "method-Context-Uint16"
+        },
+        {
+          "name": "Context.Uint32",
+          "kind": "go method",
+          "anchor": "method-Context-Uint32"
+        },
+        {
+          "name": "Context.Uint64",
+          "kind": "go method",
+          "anchor": "method-Context-Uint64"
+        },
+        {
+          "name": "Context.Uint8",
+          "kind": "go method",
+          "anchor": "method-Context-Uint8"
+        },
+        {
+          "name": "Context.Uints",
+          "kind": "go method",
+          "anchor": "method-Context-Uints"
+        },
+        {
+          "name": "Context.Uints16",
+          "kind": "go method",
+          "anchor": "method-Context-Uints16"
+        },
+        {
+          "name": "Context.Uints32",
+          "kind": "go method",
+          "anchor": "method-Context-Uints32"
+        },
+        {
+          "name": "Context.Uints64",
+          "kind": "go method",
+          "anchor": "method-Context-Uints64"
+        },
+        {
+          "name": "Context.Uints8",
+          "kind": "go method",
+          "anchor": "method-Context-Uints8"
+        },
+        {
+          "name": "type Event",
+          "kind": "go type",
+          "anchor": "type-Event"
+        },
+        {
+          "name": "Event.AnErr",
+          "kind": "go method",
+          "anchor": "method-Event-AnErr"
+        },
+        {
+          "name": "Event.Any",
+          "kind": "go method",
+          "anchor": "method-Event-Any"
+        },
+        {
+          "name": "Event.Array",
+          "kind": "go method",
+          "anchor": "method-Event-Array"
+        },
+        {
+          "name": "Example Event.Array",
+          "kind": "go example",
+          "anchor": "method-Event-Array"
+        },
+        {
+          "name": "Event.Bool",
+          "kind": "go method",
+          "anchor": "method-Event-Bool"
+        },
+        {
+          "name": "Event.Bools",
+          "kind": "go method",
+          "anchor": "method-Event-Bools"
+        },
+        {
+          "name": "Event.Bytes",
+          "kind": "go method",
+          "anchor": "method-Event-Bytes"
+        },
+        {
+          "name": "Event.Caller",
+          "kind": "go method",
+          "anchor": "method-Event-Caller"
+        },
+        {
+          "name": "Event.CallerSkipFrame",
+          "kind": "go method",
+          "anchor": "method-Event-CallerSkipFrame"
+        },
+        {
+          "name": "Event.CreateArray",
+          "kind": "go method",
+          "anchor": "method-Event-CreateArray"
+        },
+        {
+          "name": "Event.CreateDict",
+          "kind": "go method",
+          "anchor": "method-Event-CreateDict"
+        },
+        {
+          "name": "Event.Ctx",
+          "kind": "go method",
+          "anchor": "method-Event-Ctx"
+        },
+        {
+          "name": "Event.Dict",
+          "kind": "go method",
+          "anchor": "method-Event-Dict"
+        },
+        {
+          "name": "Example Event.Dict",
+          "kind": "go example",
+          "anchor": "method-Event-Dict"
+        },
+        {
+          "name": "Event.Discard",
+          "kind": "go method",
+          "anchor": "method-Event-Discard"
+        },
+        {
+          "name": "Event.Dur",
+          "kind": "go method",
+          "anchor": "method-Event-Dur"
+        },
+        {
+          "name": "Example Event.Dur",
+          "kind": "go example",
+          "anchor": "method-Event-Dur"
+        },
+        {
+          "name": "Event.Durs",
+          "kind": "go method",
+          "anchor": "method-Event-Durs"
+        },
+        {
+          "name": "Example Event.Durs",
+          "kind": "go example",
+          "anchor": "method-Event-Durs"
+        },
+        {
+          "name": "Event.EmbedObject",
+          "kind": "go method",
+          "anchor": "method-Event-EmbedObject"
+        },
+        {
+          "name": "Example Event.EmbedObject",
+          "kind": "go example",
+          "anchor": "method-Event-EmbedObject"
+        },
+        {
+          "name": "Event.Enabled",
+          "kind": "go method",
+          "anchor": "method-Event-Enabled"
+        },
+        {
+          "name": "Event.Err",
+          "kind": "go method",
+          "anchor": "method-Event-Err"
+        },
+        {
+          "name": "Event.Errs",
+          "kind": "go method",
+          "anchor": "method-Event-Errs"
+        },
+        {
+          "name": "Event.Fields",
+          "kind": "go method",
+          "anchor": "method-Event-Fields"
+        },
+        {
+          "name": "Event.Float32",
+          "kind": "go method",
+          "anchor": "method-Event-Float32"
+        },
+        {
+          "name": "Event.Float64",
+          "kind": "go method",
+          "anchor": "method-Event-Float64"
+        },
+        {
+          "name": "Event.Floats32",
+          "kind": "go method",
+          "anchor": "method-Event-Floats32"
+        },
+        {
+          "name": "Event.Floats64",
+          "kind": "go method",
+          "anchor": "method-Event-Floats64"
+        },
+        {
+          "name": "Event.Func",
+          "kind": "go method",
+          "anchor": "method-Event-Func"
+        },
+        {
+          "name": "Event.GetCtx",
+          "kind": "go method",
+          "anchor": "method-Event-GetCtx"
+        },
+        {
+          "name": "Event.Hex",
+          "kind": "go method",
+          "anchor": "method-Event-Hex"
+        },
+        {
+          "name": "Event.IPAddr",
+          "kind": "go method",
+          "anchor": "method-Event-IPAddr"
+        },
+        {
+          "name": "Event.IPAddrs",
+          "kind": "go method",
+          "anchor": "method-Event-IPAddrs"
+        },
+        {
+          "name": "Event.IPPrefix",
+          "kind": "go method",
+          "anchor": "method-Event-IPPrefix"
+        },
+        {
+          "name": "Event.IPPrefixes",
+          "kind": "go method",
+          "anchor": "method-Event-IPPrefixes"
+        },
+        {
+          "name": "Event.Int",
+          "kind": "go method",
+          "anchor": "method-Event-Int"
+        },
+        {
+          "name": "Event.Int16",
+          "kind": "go method",
+          "anchor": "method-Event-Int16"
+        },
+        {
+          "name": "Event.Int32",
+          "kind": "go method",
+          "anchor": "method-Event-Int32"
+        },
+        {
+          "name": "Event.Int64",
+          "kind": "go method",
+          "anchor": "method-Event-Int64"
+        },
+        {
+          "name": "Event.Int8",
+          "kind": "go method",
+          "anchor": "method-Event-Int8"
+        },
+        {
+          "name": "Event.Interface",
+          "kind": "go method",
+          "anchor": "method-Event-Interface"
+        },
+        {
+          "name": "Example Event.Interface",
+          "kind": "go example",
+          "anchor": "method-Event-Interface"
+        },
+        {
+          "name": "Event.Ints",
+          "kind": "go method",
+          "anchor": "method-Event-Ints"
+        },
+        {
+          "name": "Event.Ints16",
+          "kind": "go method",
+          "anchor": "method-Event-Ints16"
+        },
+        {
+          "name": "Event.Ints32",
+          "kind": "go method",
+          "anchor": "method-Event-Ints32"
+        },
+        {
+          "name": "Event.Ints64",
+          "kind": "go method",
+          "anchor": "method-Event-Ints64"
+        },
+        {
+          "name": "Event.Ints8",
+          "kind": "go method",
+          "anchor": "method-Event-Ints8"
+        },
+        {
+          "name": "Event.MACAddr",
+          "kind": "go method",
+          "anchor": "method-Event-MACAddr"
+        },
+        {
+          "name": "Event.Msg",
+          "kind": "go method",
+          "anchor": "method-Event-Msg"
+        },
+        {
+          "name": "Event.MsgFunc",
+          "kind": "go method",
+          "anchor": "method-Event-MsgFunc"
+        },
+        {
+          "name": "Event.Msgf",
+          "kind": "go method",
+          "anchor": "method-Event-Msgf"
+        },
+        {
+          "name": "Event.Object",
+          "kind": "go method",
+          "anchor": "method-Event-Object"
+        },
+        {
+          "name": "Example Event.Object",
+          "kind": "go example",
+          "anchor": "method-Event-Object"
+        },
+        {
+          "name": "Event.Objects",
+          "kind": "go method",
+          "anchor": "method-Event-Objects"
+        },
+        {
+          "name": "Example Event.Objects",
+          "kind": "go example",
+          "anchor": "method-Event-Objects"
+        },
+        {
+          "name": "Event.ObjectsV",
+          "kind": "go method",
+          "anchor": "method-Event-ObjectsV"
+        },
+        {
+          "name": "Example Event.ObjectsV",
+          "kind": "go example",
+          "anchor": "method-Event-ObjectsV"
+        },
+        {
+          "name": "Event.RawCBOR",
+          "kind": "go method",
+          "anchor": "method-Event-RawCBOR"
+        },
+        {
+          "name": "Event.RawJSON",
+          "kind": "go method",
+          "anchor": "method-Event-RawJSON"
+        },
+        {
+          "name": "Event.Send",
+          "kind": "go method",
+          "anchor": "method-Event-Send"
+        },
+        {
+          "name": "Event.Stack",
+          "kind": "go method",
+          "anchor": "method-Event-Stack"
+        },
+        {
+          "name": "Event.Str",
+          "kind": "go method",
+          "anchor": "method-Event-Str"
+        },
+        {
+          "name": "Event.Stringer",
+          "kind": "go method",
+          "anchor": "method-Event-Stringer"
+        },
+        {
+          "name": "Event.Stringers",
+          "kind": "go method",
+          "anchor": "method-Event-Stringers"
+        },
+        {
+          "name": "Example Event.Stringers",
+          "kind": "go example",
+          "anchor": "method-Event-Stringers"
+        },
+        {
+          "name": "Event.StringersV",
+          "kind": "go method",
+          "anchor": "method-Event-StringersV"
+        },
+        {
+          "name": "Event.Strs",
+          "kind": "go method",
+          "anchor": "method-Event-Strs"
+        },
+        {
+          "name": "Event.StrsV",
+          "kind": "go method",
+          "anchor": "method-Event-StrsV"
+        },
+        {
+          "name": "Event.Time",
+          "kind": "go method",
+          "anchor": "method-Event-Time"
+        },
+        {
+          "name": "Event.TimeDiff",
+          "kind": "go method",
+          "anchor": "method-Event-TimeDiff"
+        },
+        {
+          "name": "Event.Times",
+          "kind": "go method",
+          "anchor": "method-Event-Times"
+        },
+        {
+          "name": "Event.Timestamp",
+          "kind": "go method",
+          "anchor": "method-Event-Timestamp"
+        },
+        {
+          "name": "Event.Type",
+          "kind": "go method",
+          "anchor": "method-Event-Type"
+        },
+        {
+          "name": "Event.Uint",
+          "kind": "go method",
+          "anchor": "method-Event-Uint"
+        },
+        {
+          "name": "Event.Uint16",
+          "kind": "go method",
+          "anchor": "method-Event-Uint16"
+        },
+        {
+          "name": "Event.Uint32",
+          "kind": "go method",
+          "anchor": "method-Event-Uint32"
+        },
+        {
+          "name": "Event.Uint64",
+          "kind": "go method",
+          "anchor": "method-Event-Uint64"
+        },
+        {
+          "name": "Event.Uint8",
+          "kind": "go method",
+          "anchor": "method-Event-Uint8"
+        },
+        {
+          "name": "Event.Uints",
+          "kind": "go method",
+          "anchor": "method-Event-Uints"
+        },
+        {
+          "name": "Event.Uints16",
+          "kind": "go method",
+          "anchor": "method-Event-Uints16"
+        },
+        {
+          "name": "Event.Uints32",
+          "kind": "go method",
+          "anchor": "method-Event-Uints32"
+        },
+        {
+          "name": "Event.Uints64",
+          "kind": "go method",
+          "anchor": "method-Event-Uints64"
+        },
+        {
+          "name": "Event.Uints8",
+          "kind": "go method",
+          "anchor": "method-Event-Uints8"
+        },
+        {
+          "name": "type FilteredLevelWriter",
+          "kind": "go type",
+          "anchor": "type-FilteredLevelWriter"
+        },
+        {
+          "name": "FilteredLevelWriter.Close",
+          "kind": "go method",
+          "anchor": "method-FilteredLevelWriter-Close"
+        },
+        {
+          "name": "FilteredLevelWriter.Write",
+          "kind": "go method",
+          "anchor": "method-FilteredLevelWriter-Write"
+        },
+        {
+          "name": "FilteredLevelWriter.WriteLevel",
+          "kind": "go method",
+          "anchor": "method-FilteredLevelWriter-WriteLevel"
+        },
+        {
+          "name": "type Formatter",
+          "kind": "go type",
+          "anchor": "type-Formatter"
+        },
+        {
+          "name": "type FormatterByFieldName",
+          "kind": "go type",
+          "anchor": "type-FormatterByFieldName"
+        },
+        {
+          "name": "type Hook",
+          "kind": "go type",
+          "anchor": "type-Hook"
+        },
+        {
+          "name": "type HookFunc",
+          "kind": "go type",
+          "anchor": "type-HookFunc"
+        },
+        {
+          "name": "HookFunc.Run",
+          "kind": "go method",
+          "anchor": "method-HookFunc-Run"
+        },
+        {
+          "name": "type Level",
+          "kind": "go type",
+          "anchor": "type-Level"
+        },
+        {
+          "name": "Level.MarshalText",
+          "kind": "go method",
+          "anchor": "method-Level-MarshalText"
+        },
+        {
+          "name": "Level.String",
+          "kind": "go method",
+          "anchor": "method-Level-String"
+        },
+        {
+          "name": "Level.UnmarshalText",
+          "kind": "go method",
+          "anchor": "method-Level-UnmarshalText"
+        },
+        {
+          "name": "type LevelHook",
+          "kind": "go type",
+          "anchor": "type-LevelHook"
+        },
+        {
+          "name": "LevelHook.Run",
+          "kind": "go method",
+          "anchor": "method-LevelHook-Run"
+        },
+        {
+          "name": "type LevelSampler",
+          "kind": "go type",
+          "anchor": "type-LevelSampler"
+        },
+        {
+          "name": "LevelSampler.Sample",
+          "kind": "go method",
+          "anchor": "method-LevelSampler-Sample"
+        },
+        {
+          "name": "type LevelWriter",
+          "kind": "go type",
+          "anchor": "type-LevelWriter"
+        },
+        {
+          "name": "type LevelWriterAdapter",
+          "kind": "go type",
+          "anchor": "type-LevelWriterAdapter"
+        },
+        {
+          "name": "LevelWriterAdapter.Close",
+          "kind": "go method",
+          "anchor": "method-LevelWriterAdapter-Close"
+        },
+        {
+          "name": "LevelWriterAdapter.WriteLevel",
+          "kind": "go method",
+          "anchor": "method-LevelWriterAdapter-WriteLevel"
+        },
+        {
+          "name": "type LogArrayMarshaler",
+          "kind": "go type",
+          "anchor": "type-LogArrayMarshaler"
+        },
+        {
+          "name": "type LogObjectMarshaler",
+          "kind": "go type",
+          "anchor": "type-LogObjectMarshaler"
+        },
+        {
+          "name": "type Logger",
+          "kind": "go type",
+          "anchor": "type-Logger"
+        },
+        {
+          "name": "Logger.Debug",
+          "kind": "go method",
+          "anchor": "method-Logger-Debug"
+        },
+        {
+          "name": "Example Logger.Debug",
+          "kind": "go example",
+          "anchor": "method-Logger-Debug"
+        },
+        {
+          "name": "Logger.Err",
+          "kind": "go method",
+          "anchor": "method-Logger-Err"
+        },
+        {
+          "name": "Logger.Error",
+          "kind": "go method",
+          "anchor": "method-Logger-Error"
+        },
+        {
+          "name": "Example Logger.Error",
+          "kind": "go example",
+          "anchor": "method-Logger-Error"
+        },
+        {
+          "name": "Logger.Fatal",
+          "kind": "go method",
+          "anchor": "method-Logger-Fatal"
+        },
+        {
+          "name": "Logger.GetLevel",
+          "kind": "go method",
+          "anchor": "method-Logger-GetLevel"
+        },
+        {
+          "name": "Logger.Hook",
+          "kind": "go method",
+          "anchor": "method-Logger-Hook"
+        },
+        {
+          "name": "Example Logger.Hook",
+          "kind": "go example",
+          "anchor": "method-Logger-Hook"
+        },
+        {
+          "name": "Logger.Info",
+          "kind": "go method",
+          "anchor": "method-Logger-Info"
+        },
+        {
+          "name": "Example Logger.Info",
+          "kind": "go example",
+          "anchor": "method-Logger-Info"
+        },
+        {
+          "name": "Logger.Level",
+          "kind": "go method",
+          "anchor": "method-Logger-Level"
+        },
+        {
+          "name": "Example Logger.Level",
+          "kind": "go example",
+          "anchor": "method-Logger-Level"
+        },
+        {
+          "name": "Logger.Log",
+          "kind": "go method",
+          "anchor": "method-Logger-Log"
+        },
+        {
+          "name": "Example Logger.Log",
+          "kind": "go example",
+          "anchor": "method-Logger-Log"
+        },
+        {
+          "name": "Logger.Output",
+          "kind": "go method",
+          "anchor": "method-Logger-Output"
+        },
+        {
+          "name": "Logger.Panic",
+          "kind": "go method",
+          "anchor": "method-Logger-Panic"
+        },
+        {
+          "name": "Logger.Print",
+          "kind": "go method",
+          "anchor": "method-Logger-Print"
+        },
+        {
+          "name": "Example Logger.Print",
+          "kind": "go example",
+          "anchor": "method-Logger-Print"
+        },
+        {
+          "name": "Logger.Printf",
+          "kind": "go method",
+          "anchor": "method-Logger-Printf"
+        },
+        {
+          "name": "Example Logger.Printf",
+          "kind": "go example",
+          "anchor": "method-Logger-Printf"
+        },
+        {
+          "name": "Logger.Println",
+          "kind": "go method",
+          "anchor": "method-Logger-Println"
+        },
+        {
+          "name": "Example Logger.Println",
+          "kind": "go example",
+          "anchor": "method-Logger-Println"
+        },
+        {
+          "name": "Logger.Sample",
+          "kind": "go method",
+          "anchor": "method-Logger-Sample"
+        },
+        {
+          "name": "Example Logger.Sample",
+          "kind": "go example",
+          "anchor": "method-Logger-Sample"
+        },
+        {
+          "name": "Logger.Trace",
+          "kind": "go method",
+          "anchor": "method-Logger-Trace"
+        },
+        {
+          "name": "Example Logger.Trace",
+          "kind": "go example",
+          "anchor": "method-Logger-Trace"
+        },
+        {
+          "name": "Logger.UpdateContext",
+          "kind": "go method",
+          "anchor": "method-Logger-UpdateContext"
+        },
+        {
+          "name": "Logger.Warn",
+          "kind": "go method",
+          "anchor": "method-Logger-Warn"
+        },
+        {
+          "name": "Example Logger.Warn",
+          "kind": "go example",
+          "anchor": "method-Logger-Warn"
+        },
+        {
+          "name": "Logger.With",
+          "kind": "go method",
+          "anchor": "method-Logger-With"
+        },
+        {
+          "name": "Example Logger.With",
+          "kind": "go example",
+          "anchor": "method-Logger-With"
+        },
+        {
+          "name": "Logger.WithContext",
+          "kind": "go method",
+          "anchor": "method-Logger-WithContext"
+        },
+        {
+          "name": "Logger.WithLevel",
+          "kind": "go method",
+          "anchor": "method-Logger-WithLevel"
+        },
+        {
+          "name": "Example Logger.WithLevel",
+          "kind": "go example",
+          "anchor": "method-Logger-WithLevel"
+        },
+        {
+          "name": "Logger.Write",
+          "kind": "go method",
+          "anchor": "method-Logger-Write"
+        },
+        {
+          "name": "Example Logger.Write",
+          "kind": "go example",
+          "anchor": "method-Logger-Write"
+        },
+        {
+          "name": "type RandomSampler",
+          "kind": "go type",
+          "anchor": "type-RandomSampler"
+        },
+        {
+          "name": "RandomSampler.Sample",
+          "kind": "go method",
+          "anchor": "method-RandomSampler-Sample"
+        },
+        {
+          "name": "type Sampler",
+          "kind": "go type",
+          "anchor": "type-Sampler"
+        },
+        {
+          "name": "type SlogHandler",
+          "kind": "go type",
+          "anchor": "type-SlogHandler"
+        },
+        {
+          "name": "SlogHandler.Enabled",
+          "kind": "go method",
+          "anchor": "method-SlogHandler-Enabled"
+        },
+        {
+          "name": "SlogHandler.Handle",
+          "kind": "go method",
+          "anchor": "method-SlogHandler-Handle"
+        },
+        {
+          "name": "SlogHandler.WithAttrs",
+          "kind": "go method",
+          "anchor": "method-SlogHandler-WithAttrs"
+        },
+        {
+          "name": "SlogHandler.WithGroup",
+          "kind": "go method",
+          "anchor": "method-SlogHandler-WithGroup"
+        },
+        {
+          "name": "type SyslogWriter",
+          "kind": "go type",
+          "anchor": "type-SyslogWriter"
+        },
+        {
+          "name": "type TestWriter",
+          "kind": "go type",
+          "anchor": "type-TestWriter"
+        },
+        {
+          "name": "TestWriter.Write",
+          "kind": "go method",
+          "anchor": "method-TestWriter-Write"
+        },
+        {
+          "name": "type TestingLog",
+          "kind": "go type",
+          "anchor": "type-TestingLog"
+        },
+        {
+          "name": "type TriggerLevelWriter",
+          "kind": "go type",
+          "anchor": "type-TriggerLevelWriter"
+        },
+        {
+          "name": "TriggerLevelWriter.Close",
+          "kind": "go method",
+          "anchor": "method-TriggerLevelWriter-Close"
+        },
+        {
+          "name": "TriggerLevelWriter.Trigger",
+          "kind": "go method",
+          "anchor": "method-TriggerLevelWriter-Trigger"
+        },
+        {
+          "name": "TriggerLevelWriter.WriteLevel",
+          "kind": "go method",
+          "anchor": "method-TriggerLevelWriter-WriteLevel"
+        }
+      ],
+      "documentId": "package-root",
+      "locale": "en",
+      "contentLocale": "en",
+      "contentVersion": "current",
+      "versionScope": "site",
+      "alternates": [
+        {
+          "locale": "en",
+          "contentVersion": "current",
+          "url": "https://slowwwkiss.github.io/zerolog/api/package-root.html",
+          "markdown": "https://slowwwkiss.github.io/zerolog/api/package-root.md"
+        }
+      ]
+    },
+    {
+      "id": "api.md",
+      "kind": "page",
+      "title": "Go API",
+      "description": "Go API for github.com/rs/zerolog across 1 package.",
+      "tab": "api",
+      "url": "https://slowwwkiss.github.io/zerolog/api.html",
+      "markdown": "https://slowwwkiss.github.io/zerolog/api.md",
+      "file": "api.md",
+      "searchText": "- [github.com/rs/zerolog](/zerolog/api/package-root.html): package zerolog provides a lightweight logging library dedicated to json logging.",
+      "documentId": "index",
+      "locale": "en",
+      "contentLocale": "en",
+      "contentVersion": "current",
+      "versionScope": "site",
+      "alternates": [
+        {
+          "locale": "en",
+          "contentVersion": "current",
+          "url": "https://slowwwkiss.github.io/zerolog/api.html",
+          "markdown": "https://slowwwkiss.github.io/zerolog/api.md"
+        }
+      ]
+    }
+  ]
+}

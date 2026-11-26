@@ -1,0 +1,1 @@
+[["NewSlogHandler","/zerolog/api/package-root.html#func-NewSlogHandler",1,1],["NewTestWriter","#func-NewTestWriter",1,1],["Nop","#func-Nop",1,1],["ParseLevel","#func-ParseLevel",1,1],["SetGlobalLevel","#func-SetGlobalLevel",1,1],["SyncWriter","#func-SyncWriter",1,1],["SyslogCEEWriter","#func-SyslogCEEWriter",1,1],["SyslogLevelWriter","#func-SyslogLevelWriter",1,1]]

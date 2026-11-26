@@ -1,0 +1,16 @@
+# zerolog
+
+## Docs
+
+- [zerolog — Zero Allocation JSON Logger](https://slowwwkiss.github.io/zerolog/index.md): Fast, simple structured logging for Go, dedicated to JSON output. Leveled logging, sampling, hooks, contextual fields, and a chaining API that avoids allocations and reflection.
+- [Quickstart](https://slowwwkiss.github.io/zerolog/quickstart.md): Install zerolog, write your first log line, and log your first leveled event with contextual fields.
+- [Levels and sampling](https://slowwwkiss.github.io/zerolog/guides/levels-sampling.md): The seven log levels, the global level switch, logging without a level, and sampling with BasicSampler and BurstSampler.
+- [Context and fields](https://slowwwkiss.github.io/zerolog/guides/context-fields.md): Sub-loggers, contextual fields, sub-dictionaries, hooks, caller info, custom field names, and context.Context integration.
+- [Writers and output](https://slowwwkiss.github.io/zerolog/guides/writers-output.md): ConsoleWriter pretty logging, multiple outputs with MultiLevelWriter, the lock-free diode writer, and syslog and journald writers.
+- [Integrations](https://slowwwkiss.github.io/zerolog/guides/integrations.md): Use zerolog with net/http via hlog, with the standard library log/slog, and as the standard logger's output.
+- [Performance](https://slowwwkiss.github.io/zerolog/guides/performance.md): Why zerolog is fast, the benchmark numbers, and the caveats to respect — field duplication, Event pooling, and UpdateContext concurrency.
+
+## Go API
+
+- [github.com/rs/zerolog](https://slowwwkiss.github.io/zerolog/api/package-root.md): Package zerolog provides a lightweight logging library dedicated to JSON logging.
+- [Go API](https://slowwwkiss.github.io/zerolog/api.md): Go API for github.com/rs/zerolog across 1 package.

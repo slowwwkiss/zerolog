@@ -1,0 +1,77 @@
+{
+  "/zerolog/index.md": {
+    "Content-Type": "text/markdown; charset=utf-8",
+    "Link": "<https://slowwwkiss.github.io/zerolog/>; rel=\"canonical\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\""
+  },
+  "/zerolog/quickstart.md": {
+    "Content-Type": "text/markdown; charset=utf-8",
+    "Link": "<https://slowwwkiss.github.io/zerolog/quickstart.html>; rel=\"canonical\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\""
+  },
+  "/zerolog/guides/levels-sampling.md": {
+    "Content-Type": "text/markdown; charset=utf-8",
+    "Link": "<https://slowwwkiss.github.io/zerolog/guides/levels-sampling.html>; rel=\"canonical\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\""
+  },
+  "/zerolog/guides/context-fields.md": {
+    "Content-Type": "text/markdown; charset=utf-8",
+    "Link": "<https://slowwwkiss.github.io/zerolog/guides/context-fields.html>; rel=\"canonical\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\""
+  },
+  "/zerolog/guides/writers-output.md": {
+    "Content-Type": "text/markdown; charset=utf-8",
+    "Link": "<https://slowwwkiss.github.io/zerolog/guides/writers-output.html>; rel=\"canonical\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\""
+  },
+  "/zerolog/guides/integrations.md": {
+    "Content-Type": "text/markdown; charset=utf-8",
+    "Link": "<https://slowwwkiss.github.io/zerolog/guides/integrations.html>; rel=\"canonical\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\""
+  },
+  "/zerolog/guides/performance.md": {
+    "Content-Type": "text/markdown; charset=utf-8",
+    "Link": "<https://slowwwkiss.github.io/zerolog/guides/performance.html>; rel=\"canonical\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\""
+  },
+  "/zerolog/api/package-root.md": {
+    "Content-Type": "text/markdown; charset=utf-8",
+    "Link": "<https://slowwwkiss.github.io/zerolog/api/package-root.html>; rel=\"canonical\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\""
+  },
+  "/zerolog/api.md": {
+    "Content-Type": "text/markdown; charset=utf-8",
+    "Link": "<https://slowwwkiss.github.io/zerolog/api.html>; rel=\"canonical\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\""
+  },
+  "/zerolog/documents.json": {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  "/zerolog/llms.txt": {
+    "Content-Type": "text/plain; charset=utf-8"
+  },
+  "/zerolog/llms-full.txt": {
+    "Content-Type": "text/plain; charset=utf-8"
+  },
+  "/zerolog/": {
+    "Link": "<https://slowwwkiss.github.io/zerolog/index.md>; rel=\"alternate\"; type=\"text/markdown\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\"; type=\"text/plain\""
+  },
+  "/zerolog/quickstart.html": {
+    "Link": "<https://slowwwkiss.github.io/zerolog/quickstart.md>; rel=\"alternate\"; type=\"text/markdown\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\"; type=\"text/plain\""
+  },
+  "/zerolog/guides/levels-sampling.html": {
+    "Link": "<https://slowwwkiss.github.io/zerolog/guides/levels-sampling.md>; rel=\"alternate\"; type=\"text/markdown\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\"; type=\"text/plain\""
+  },
+  "/zerolog/guides/context-fields.html": {
+    "Link": "<https://slowwwkiss.github.io/zerolog/guides/context-fields.md>; rel=\"alternate\"; type=\"text/markdown\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\"; type=\"text/plain\""
+  },
+  "/zerolog/guides/writers-output.html": {
+    "Link": "<https://slowwwkiss.github.io/zerolog/guides/writers-output.md>; rel=\"alternate\"; type=\"text/markdown\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\"; type=\"text/plain\""
+  },
+  "/zerolog/guides/integrations.html": {
+    "Link": "<https://slowwwkiss.github.io/zerolog/guides/integrations.md>; rel=\"alternate\"; type=\"text/markdown\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\"; type=\"text/plain\""
+  },
+  "/zerolog/guides/performance.html": {
+    "Link": "<https://slowwwkiss.github.io/zerolog/guides/performance.md>; rel=\"alternate\"; type=\"text/markdown\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\"; type=\"text/plain\""
+  },
+  "/zerolog/api/package-root.html": {
+    "Link": "<https://slowwwkiss.github.io/zerolog/api/package-root.md>; rel=\"alternate\"; type=\"text/markdown\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\"; type=\"text/plain\""
+  },
+  "/zerolog/api.html": {
+    "Link": "<https://slowwwkiss.github.io/zerolog/api.md>; rel=\"alternate\"; type=\"text/markdown\", <https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\"; type=\"text/plain\""
+  },
+  "/zerolog/404.html": {
+    "Link": "<https://slowwwkiss.github.io/zerolog/llms.txt>; rel=\"describedby\"; type=\"text/plain\""
+  }
+}
