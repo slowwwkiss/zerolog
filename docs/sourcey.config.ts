@@ -5,7 +5,7 @@ const PIN = "284f7c889533b78603191349f4a5c48628d7afd2";
 export default defineConfig({
   name: "zerolog",
   siteUrl: "https://zerolog-docs.readthedocs.io",
-  baseUrl: "/",
+  baseUrl: "/en/latest/",
   navbar: {
     links: [
       { type: "github", href: "https://github.com/rs/zerolog" },
