@@ -2,9 +2,8 @@
 # Place this file at the REPO ROOT of the fork (slowwwkiss/zerolog),
 # and place the Sourcey project (sourcey.config.ts, index.md, quickstart.md,
 # guides/, zerolog/godoc.json, package.json) under docs/ in the same fork.
-# RTD project slug: zerolog  ->  https://zerolog.readthedocs.io/
-# (if the slug is taken, use zerolog-docs -> https://zerolog-docs.readthedocs.io/
-#  and update siteUrl/baseUrl in docs/sourcey.config.ts accordingly)
+# RTD project slug: zerolog-docs  ->  https://zerolog-docs.readthedocs.io/  (slug zerolog SUDAH DIPAKAI proyek TheGhouls/zerolog, terverifikasi 27 Nov 02:52 WIB)
+# (slug zerolog taken; zerolog-docs dipakai)
 version: 2
 
 build:

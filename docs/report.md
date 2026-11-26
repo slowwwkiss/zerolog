@@ -2,7 +2,7 @@
 
 **Library:** `github.com/rs/zerolog` (MIT, 12,539 stars)
 **Pinned commit:** `284f7c889533b78603191349f4a5c48628d7afd2` (10 Nov 2026, "fix(cbor): decode major type 0 over its full unsigned range (#796)")
-**Site:** https://zerolog.readthedocs.io/ (Sourcey 3.9.5, godoc snapshot adapter, 10 pages, 311 public API symbols)
+**Site:** https://zerolog-docs.readthedocs.io/ (Sourcey 3.9.5, godoc snapshot adapter, 10 pages, 311 public API symbols)
 **Snapshot:** `godoc.json` generated with `sourcey godoc -m . -p .` (Go 1.27.4, `go list` + `go/parser`; parse only, no target code executed)
 **Build:** `sourcey build -c sourcey.config.ts -o dist` in snapshot mode (no Go needed at build time)
 
@@ -28,7 +28,7 @@
 - **receipt_ref:** `runx:receipt:sha256:281aad32316983e2e8d272acfb3daacdcae01f11552a2f76f2f9fbb981755b1c`
 - **Run:** `run_sourcey-zerolog-build_01a218a5a72f1c0d5be6569a` (skill `sourcey-zerolog-build`, build runner) — sealed, outcome `completed`, result is the validation record above.
 - **Verify:** `runx verify --receipt receipt.json` reports `valid: true`, digest valid, content address valid, signature valid (local issuer), no findings.
-- **Receipt file (public):** https://zerolog.readthedocs.io/receipt.json — fetchable by anyone for independent verification.
+- **Receipt file (public):** https://zerolog-docs.readthedocs.io/receipt.json — fetchable by anyone for independent verification.
 - **Public runx.ai URL (not yet live):** https://runx.ai/r/281aad32316983e2e8d272acfb3daacdcae01f11552a2f76f2f9fbb981755b1c currently returns 404. Publishing it needs `runx notarize`, which needs a runx public API token from `runx login` (browser OAuth) — and the runx CLI cannot reach api.runx.ai from the build VM (its HTTP client fails on the egress proxy DNS). That is a deploy-side step for the parent, not a gap in the receipt itself: the receipt is sealed, valid, and publicly hosted.
 
 ## Verification
