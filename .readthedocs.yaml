@@ -1,0 +1,24 @@
+# Read the Docs build for the zerolog Sourcey site.
+# Place this file at the REPO ROOT of the fork (slowwwkiss/zerolog),
+# and place the Sourcey project (sourcey.config.ts, index.md, quickstart.md,
+# guides/, zerolog/godoc.json, package.json) under docs/ in the same fork.
+# RTD project slug: zerolog  ->  https://zerolog.readthedocs.io/
+# (if the slug is taken, use zerolog-docs -> https://zerolog-docs.readthedocs.io/
+#  and update siteUrl/baseUrl in docs/sourcey.config.ts accordingly)
+version: 2
+
+build:
+  os: ubuntu-24.04
+  tools:
+    nodejs: "22"
+  jobs:
+    create_environment:
+      - cd docs && npm install sourcey@3.9.5 --no-audit --no-fund
+    build:
+      html:
+        - cd docs && ./node_modules/.bin/sourcey build -c sourcey.config.ts -o $READTHEDOCS_OUTPUT/html
+
+# NOTE: before pushing to the fork, edit docs/sourcey.config.ts:
+#   siteUrl: "https://zerolog.readthedocs.io"  (or the slug you got)
+#   baseUrl: "/"
+# then rebuild locally once to confirm, and push.
