@@ -168,27 +168,33 @@
         "live_checks": [
           {
             "http": 200,
-            "url": "https://zerolog-docs.surge.sh/"
+            "url": "https://slowwwkiss.github.io/zerolog/",
+            "checked_at": "2026-11-27T03:14:00+07:00"
           },
           {
             "http": 200,
-            "url": "https://zerolog-docs.surge.sh/quickstart"
+            "url": "https://slowwwkiss.github.io/zerolog/quickstart.html",
+            "checked_at": "2026-11-27T03:14:00+07:00"
           },
           {
             "http": 200,
-            "url": "https://zerolog-docs.surge.sh/guides/levels-sampling.html"
+            "url": "https://slowwwkiss.github.io/zerolog/api.html",
+            "checked_at": "2026-11-27T03:14:00+07:00"
           },
           {
             "http": 200,
-            "url": "https://zerolog-docs.surge.sh/api.html"
+            "url": "https://slowwwkiss.github.io/zerolog/evidence.json",
+            "checked_at": "2026-11-27T03:14:00+07:00"
           },
           {
             "http": 200,
-            "url": "https://zerolog-docs.surge.sh/api/package-root.html"
+            "url": "https://slowwwkiss.github.io/zerolog/receipt.json",
+            "checked_at": "2026-11-27T03:14:00+07:00"
           },
           {
             "http": 200,
-            "url": "https://zerolog-docs.surge.sh/receipt.json"
+            "url": "https://slowwwkiss.github.io/zerolog/report.md",
+            "checked_at": "2026-11-27T03:14:00+07:00"
           }
         ]
       }
@@ -227,7 +233,7 @@
     },
     {
       "name": "host_migration",
-      "value": "Public host moved from zerolog-docs.surge.sh (rejected by jury 26 Nov 23:50 WIB: preview host out of scope) to slowwwkiss.github.io/zerolog (GitHub Pages on the maintainer fork slowwwkiss/zerolog, durable project pages). Primary path was Read the Docs (slug zerolog-docs), blocked because Cloudflare Turnstile rejected the cloud browser network 8 times in two environments (27 Nov 03:09 WIB) and no RTD account could be created; GitHub Pages is the fallback durable host. verification.live_checks above record the pre-migration live checks against the identical Surge deployment (same 10 pages, same pinned commit); live checks against the GitHub Pages URLs will replace them once the Pages site is live."
+      "value": "Public host moved from zerolog-docs.surge.sh (rejected by jury 26 Nov 23:50 WIB: preview host out of scope) to slowwwkiss.github.io/zerolog (GitHub Pages on the maintainer fork slowwwkiss/zerolog, durable project pages). Primary path was Read the Docs (slug zerolog-docs), blocked because Cloudflare Turnstile rejected the cloud browser network 8 times in two environments (27 Nov 03:09 WIB) and no RTD account could be created; GitHub Pages is the fallback durable host. verification.live_checks above record the pre-migration live checks against the identical Surge deployment (same 10 pages, same pinned commit); live checks below are the fresh GitHub Pages checks (all HTTP 200, 27 Nov 2026 03:14 WIB); the Surge pre-migration record is superseded."
     }
   ],
   "summary": "Sourcey documentation site for the rs/zerolog Go package (github.com/rs/zerolog), generated from the pinned source commit 284f7c889533b78603191349f4a5c48628d7afd2 (10 Nov 2026, MIT). Built with Sourcey 3.9.5 using the godoc adapter in snapshot mode: a godoc.json snapshot of the root package (311 public API symbols) plus an overview, a quickstart, and five guides condensed from the project's own README at the pinned commit. The static site (10 pages) is published at https://slowwwkiss.github.io/zerolog/ and every page returns HTTP 200.",
