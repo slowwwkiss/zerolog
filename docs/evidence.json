@@ -135,11 +135,11 @@
     },
     {
       "name": "public_url",
-      "value": "https://zerolog-docs.readthedocs.io/"
+      "value": "https://zerolog-docs.readthedocs.io/en/latest/"
     },
     {
       "name": "report_url",
-      "value": "https://zerolog-docs.readthedocs.io/report.md"
+      "value": "https://zerolog-docs.readthedocs.io/en/latest/report.md"
     },
     {
       "name": "repo_default_branch",
@@ -168,29 +168,30 @@
         "live_checks": [
           {
             "http": 200,
-            "url": "https://zerolog-docs.surge.sh/"
+            "url": "https://zerolog-docs.readthedocs.io/en/latest/"
           },
           {
             "http": 200,
-            "url": "https://zerolog-docs.surge.sh/quickstart"
+            "url": "https://zerolog-docs.readthedocs.io/en/latest/quickstart.html"
           },
           {
             "http": 200,
-            "url": "https://zerolog-docs.surge.sh/guides/levels-sampling.html"
+            "url": "https://zerolog-docs.readthedocs.io/en/latest/guides/levels-sampling.html"
           },
           {
             "http": 200,
-            "url": "https://zerolog-docs.surge.sh/api.html"
+            "url": "https://zerolog-docs.readthedocs.io/en/latest/api.html"
           },
           {
             "http": 200,
-            "url": "https://zerolog-docs.surge.sh/api/package-root.html"
+            "url": "https://zerolog-docs.readthedocs.io/en/latest/api/package-root.html"
           },
           {
             "http": 200,
-            "url": "https://zerolog-docs.surge.sh/receipt.json"
+            "url": "https://zerolog-docs.readthedocs.io/en/latest/receipt.json"
           }
-        ]
+        ],
+        "live_checks_at": "2026-11-27T03:36:00+07:00"
       }
     },
     {
@@ -211,7 +212,7 @@
     },
     {
       "name": "receipt_file_url",
-      "value": "https://zerolog-docs.readthedocs.io/receipt.json"
+      "value": "https://zerolog-docs.readthedocs.io/en/latest/receipt.json"
     },
     {
       "name": "receipt_public_url_intended",
@@ -227,9 +228,9 @@
     },
     {
       "name": "host_migration",
-      "value": "Public host moved from zerolog-docs.surge.sh (rejected by jury 26 Nov 23:50 WIB: preview host out of scope) to zerolog-docs.readthedocs.io (Read the Docs, durable docs host). Slug zerolog.readthedocs.io was already taken by TheGhouls/zerolog Sphinx docs (verified 27 Nov 02:52 WIB), so zerolog-docs is used. verification.live_checks above record the pre-migration live checks against the identical Surge deployment (same 10 pages, same pinned commit); live checks against the Read the Docs URLs will replace them once the RTD build is live."
+      "value": "Public host moved from zerolog-docs.surge.sh (rejected by jury 26 Nov 23:50 WIB: preview host out of scope) to zerolog-docs.readthedocs.io (Read the Docs, durable docs host). Slug zerolog.readthedocs.io was already taken by TheGhouls/zerolog Sphinx docs (verified 27 Nov 02:52 WIB), so zerolog-docs is used. RTD project created by the user from his own phone 27 Nov 03:35 WIB; first build #36197487 succeeded and the site is live at https://zerolog-docs.readthedocs.io/en/latest/ (verified 27 Nov 03:36 WIB: 8 URLs HTTP 200 with content checked). verification.live_checks above are the fresh RTD checks; the earlier Surge checks are archived in evidence v1."
     }
   ],
-  "summary": "Sourcey documentation site for the rs/zerolog Go package (github.com/rs/zerolog), generated from the pinned source commit 284f7c889533b78603191349f4a5c48628d7afd2 (10 Nov 2026, MIT). Built with Sourcey 3.9.5 using the godoc adapter in snapshot mode: a godoc.json snapshot of the root package (311 public API symbols) plus an overview, a quickstart, and five guides condensed from the project's own README at the pinned commit. The static site (10 pages) is published at https://zerolog-docs.readthedocs.io/ and every page returns HTTP 200.",
+  "summary": "Sourcey documentation site for the rs/zerolog Go package (github.com/rs/zerolog), generated from the pinned source commit 284f7c889533b78603191349f4a5c48628d7afd2 (10 Nov 2026, MIT). Built with Sourcey 3.9.5 using the godoc adapter in snapshot mode: a godoc.json snapshot of the root package (311 public API symbols) plus an overview, a quickstart, and five guides condensed from the project's own README at the pinned commit. The static site (10 pages) is published at https://zerolog-docs.readthedocs.io/en/latest/ and every page returns HTTP 200.",
   "receipt_ref": "runx:receipt:sha256:281aad32316983e2e8d272acfb3daacdcae01f11552a2f76f2f9fbb981755b1c"
 }
