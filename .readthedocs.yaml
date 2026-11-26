@@ -17,6 +17,7 @@ build:
     build:
       html:
         - cd docs && ./node_modules/.bin/sourcey build -c sourcey.config.ts -o $READTHEDOCS_OUTPUT/html
+        - cp docs/evidence.json docs/receipt.json docs/report.md $READTHEDOCS_OUTPUT/html/
 
 # NOTE: before pushing to the fork, edit docs/sourcey.config.ts:
 #   siteUrl: "https://zerolog.readthedocs.io"  (or the slug you got)

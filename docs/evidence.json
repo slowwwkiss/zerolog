@@ -1,0 +1,235 @@
+{
+  "observations": [
+    {
+      "name": "repo_url",
+      "value": "https://github.com/rs/zerolog"
+    },
+    {
+      "name": "pinned_commit",
+      "value": "284f7c889533b78603191349f4a5c48628d7afd2"
+    },
+    {
+      "name": "pinned_commit_date",
+      "value": "2026-11-10T15:33:05Z"
+    },
+    {
+      "name": "pinned_commit_message",
+      "value": "fix(cbor): decode major type 0 over its full unsigned range (#796)"
+    },
+    {
+      "name": "license",
+      "value": "MIT"
+    },
+    {
+      "name": "license_spdx",
+      "value": "MIT"
+    },
+    {
+      "name": "adapter",
+      "value": "godoc (snapshot mode)"
+    },
+    {
+      "name": "sourcey_command_snapshot",
+      "value": "sourcey godoc -m ./zerolog -p . -o ./zerolog/godoc.json"
+    },
+    {
+      "name": "sourcey_command_build",
+      "value": "sourcey build -c sourcey.config.ts -o dist"
+    },
+    {
+      "name": "sourcey_config",
+      "value": "sourcey.config.ts (defineConfig; Docs tab = markdown guides, Go API tab = godoc({module: ./zerolog, packages: [\".\"], mode: \"snapshot\", snapshot: ./zerolog/godoc.json, sourceBasePath: https://github.com/rs/zerolog/blob/284f7c889533b78603191349f4a5c48628d7afd2/}))"
+    },
+    {
+      "name": "sourcey_version",
+      "value": "3.9.5"
+    },
+    {
+      "name": "go_version_for_snapshot",
+      "value": "go1.27.4 linux/amd64"
+    },
+    {
+      "name": "page_count",
+      "value": 10
+    },
+    {
+      "name": "page_list",
+      "value": [
+        "/",
+        "/quickstart",
+        "/guides/levels-sampling.html",
+        "/guides/context-fields.html",
+        "/guides/writers-output.html",
+        "/guides/integrations.html",
+        "/guides/performance.html",
+        "/api.html",
+        "/api/package-root.html",
+        "/404.html"
+      ]
+    },
+    {
+      "name": "api_coverage",
+      "value": {
+        "constants": 16,
+        "function_names": [
+          "Arr",
+          "AsLogObjectMarshalers",
+          "AsStringers",
+          "ConsoleTestWriter",
+          "Ctx",
+          "Dict",
+          "DisableSampling",
+          "GlobalLevel",
+          "MultiLevelWriter",
+          "New",
+          "NewConsoleWriter",
+          "NewLevelHook",
+          "NewSlogHandler",
+          "NewTestWriter",
+          "Nop",
+          "ParseLevel",
+          "SetGlobalLevel",
+          "SyncWriter",
+          "SyslogCEEWriter",
+          "SyslogLevelWriter"
+        ],
+        "package": "github.com/rs/zerolog",
+        "package_functions": 20,
+        "total_public_symbols": 311,
+        "type_methods": 215,
+        "type_names": [
+          "Array",
+          "BasicSampler",
+          "BurstSampler",
+          "ConsoleWriter",
+          "Context",
+          "Event",
+          "FilteredLevelWriter",
+          "Formatter",
+          "FormatterByFieldName",
+          "Hook",
+          "HookFunc",
+          "Level",
+          "LevelHook",
+          "LevelSampler",
+          "LevelWriter",
+          "LevelWriterAdapter",
+          "LogArrayMarshaler",
+          "LogObjectMarshaler",
+          "Logger",
+          "RandomSampler",
+          "Sampler",
+          "SlogHandler",
+          "SyslogWriter",
+          "TestWriter",
+          "TestingLog",
+          "TriggerLevelWriter"
+        ],
+        "types": 26,
+        "variables": 34
+      }
+    },
+    {
+      "name": "coverage_notes",
+      "value": "Root package only (github.com/rs/zerolog). Subpackages log, hlog, diode, journald, pkgerrors, internal, cmd are referenced in the guides but have no API reference pages in this build; that is a documented coverage gap in the report. Guide content is condensed from the project's README.md at the pinned commit (30,094 bytes), keeping code examples verbatim. No test-file examples were rendered (the snapshot recorded 0 package examples). Source files were fetched as plain data over HTTPS at the pinned commit (no repository clone); the godoc snapshot parses them with go/parser and does not execute target code."
+    },
+    {
+      "name": "public_url",
+      "value": "https://zerolog.readthedocs.io/"
+    },
+    {
+      "name": "report_url",
+      "value": "https://zerolog.readthedocs.io/report.md"
+    },
+    {
+      "name": "repo_default_branch",
+      "value": "master"
+    },
+    {
+      "name": "repo_last_push",
+      "value": "2026-11-10T15:33:06Z"
+    },
+    {
+      "name": "repo_stars",
+      "value": 12539
+    },
+    {
+      "name": "runx_version",
+      "value": "runx-cli 0.11.1"
+    },
+    {
+      "name": "verification",
+      "value": {
+        "api_symbols_minimum_required": 20,
+        "api_symbols_total": 311,
+        "build_exit": 0,
+        "build_pages": 10,
+        "build_time_seconds": 3.0,
+        "live_checks": [
+          {
+            "http": 200,
+            "url": "https://zerolog-docs.surge.sh/"
+          },
+          {
+            "http": 200,
+            "url": "https://zerolog-docs.surge.sh/quickstart"
+          },
+          {
+            "http": 200,
+            "url": "https://zerolog-docs.surge.sh/guides/levels-sampling.html"
+          },
+          {
+            "http": 200,
+            "url": "https://zerolog-docs.surge.sh/api.html"
+          },
+          {
+            "http": 200,
+            "url": "https://zerolog-docs.surge.sh/api/package-root.html"
+          },
+          {
+            "http": 200,
+            "url": "https://zerolog-docs.surge.sh/receipt.json"
+          }
+        ]
+      }
+    },
+    {
+      "name": "receipt_ref",
+      "value": "runx:receipt:sha256:281aad32316983e2e8d272acfb3daacdcae01f11552a2f76f2f9fbb981755b1c"
+    },
+    {
+      "name": "receipt_id",
+      "value": "sha256:281aad32316983e2e8d272acfb3daacdcae01f11552a2f76f2f9fbb981755b1c"
+    },
+    {
+      "name": "receipt_run_id",
+      "value": "run_sourcey-zerolog-build_01a218a5a72f1c0d5be6569a"
+    },
+    {
+      "name": "receipt_skill",
+      "value": "sourcey-zerolog-build (runx skill, build runner; sealed, outcome completed)"
+    },
+    {
+      "name": "receipt_file_url",
+      "value": "https://zerolog.readthedocs.io/receipt.json"
+    },
+    {
+      "name": "receipt_public_url_intended",
+      "value": "https://runx.ai/r/281aad32316983e2e8d272acfb3daacdcae01f11552a2f76f2f9fbb981755b1c"
+    },
+    {
+      "name": "receipt_public_url_status",
+      "value": "Not yet published (HTTP 404 at check time). Notarization needs a runx public API token via runx login (browser OAuth) and the runx CLI cannot reach api.runx.ai from this VM (its HTTP client fails on the egress proxy DNS). The receipt itself is sealed and valid: runx verify reports valid=true, digest valid, signature valid. The receipt file is publicly fetchable at receipt_file_url for independent verification."
+    },
+    {
+      "name": "receipt_verify",
+      "value": "runx verify --receipt receipt.json: valid=true, digest valid, content_address valid, signature valid (issuer local), findings none"
+    },
+    {
+      "name": "host_migration",
+      "value": "Public host moved from zerolog-docs.surge.sh (rejected by jury 26 Nov 23:50 WIB: preview host out of scope) to zerolog.readthedocs.io (Read the Docs, durable docs host). verification.live_checks above record the pre-migration live checks against the identical Surge deployment (same 10 pages, same pinned commit); live checks against the Read the Docs URLs will replace them once the RTD build is live."
+    }
+  ],
+  "summary": "Sourcey documentation site for the rs/zerolog Go package (github.com/rs/zerolog), generated from the pinned source commit 284f7c889533b78603191349f4a5c48628d7afd2 (10 Nov 2026, MIT). Built with Sourcey 3.9.5 using the godoc adapter in snapshot mode: a godoc.json snapshot of the root package (311 public API symbols) plus an overview, a quickstart, and five guides condensed from the project's own README at the pinned commit. The static site (10 pages) is published at https://zerolog.readthedocs.io/ and every page returns HTTP 200.",
+  "receipt_ref": "runx:receipt:sha256:281aad32316983e2e8d272acfb3daacdcae01f11552a2f76f2f9fbb981755b1c"
+}
